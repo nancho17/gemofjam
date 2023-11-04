@@ -1,0 +1,95 @@
+[gd_scene load_steps=7 format=3 uid="uid://dfyi7ap6ovg0k"]
+
+[ext_resource type="PackedScene" uid="uid://s6bw0031evom" path="res://scenes/ui/menu_button.tscn" id="1_7tohj"]
+[ext_resource type="Script" path="res://scenes/main/start_menu.gd" id="1_euk03"]
+[ext_resource type="Shader" path="res://scenes/main/start_menu.gdshader" id="3_wn0sp"]
+[ext_resource type="Texture2D" uid="uid://cgujuqsl4kg5v" path="res://assets/textures/fishscale.jpg" id="4_dtq76"]
+[ext_resource type="Texture2D" uid="uid://gsve0020lh8y" path="res://assets/imagtext/titleun.png" id="5_5r30o"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_xctki"]
+shader = ExtResource("3_wn0sp")
+shader_parameter/position = Vector2(0, 0)
+shader_parameter/zoom = 4.385
+shader_parameter/size = 10.0
+shader_parameter/hidden_texture = ExtResource("4_dtq76")
+
+[node name="StartMenu" type="CanvasLayer"]
+script = ExtResource("1_euk03")
+
+[node name="Panel" type="Panel" parent="."]
+custom_minimum_size = Vector2(200, 200)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -35.0
+offset_top = -5.0
+offset_right = 35.0
+offset_bottom = 131.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PlayButton" parent="Panel/VBoxContainer" instance=ExtResource("1_7tohj")]
+layout_mode = 2
+
+[node name="OptionButton" parent="Panel/VBoxContainer" instance=ExtResource("1_7tohj")]
+layout_mode = 2
+text = "Option"
+
+[node name="QuitButton" parent="Panel/VBoxContainer" instance=ExtResource("1_7tohj")]
+layout_mode = 2
+text = "Quit"
+
+[node name="Title" type="Panel" parent="."]
+self_modulate = Color(1, 1, 1, 0)
+custom_minimum_size = Vector2(200, 200)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -102.0
+offset_top = -284.0
+offset_right = 98.0
+offset_bottom = -84.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TextureRect" type="TextureRect" parent="Title"]
+material = SubResource("ShaderMaterial_xctki")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -236.5
+offset_right = 236.5
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("5_5r30o")
+
+[node name="Label" type="Label" parent="Title"]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -66.5
+offset_top = -13.0
+offset_right = 66.5
+offset_bottom = 13.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Ｔｈｅ ｍｅｒｃｓ"
+horizontal_alignment = 1
+vertical_alignment = 1

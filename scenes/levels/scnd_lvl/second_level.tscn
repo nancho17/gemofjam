@@ -1,0 +1,126 @@
+[gd_scene load_steps=16 format=3 uid="uid://dwkj5bwjttcfi"]
+
+[ext_resource type="NavigationMesh" uid="uid://bkan8caithbs7" path="res://scenes/game_object/ambient/navigation/nav_mesh_frst.tres" id="1_b7ha7"]
+[ext_resource type="Material" uid="uid://0wmrf684ohq" path="res://scenes/game_object/ambient/floors/brick_stone_floor.tres" id="2_1dolj"]
+[ext_resource type="Texture2D" uid="uid://08jt30lnhe1s" path="res://assets/imageobj/apple_tree.png" id="3_a6c80"]
+[ext_resource type="PackedScene" uid="uid://bfgibqu5145n4" path="res://scenes/game_object/ambient/floors/grassfloor.tscn" id="4_funwv"]
+[ext_resource type="Shader" path="res://scenes/game_object/ambient/sky/asky.gdshader" id="5_kqnpa"]
+[ext_resource type="Script" path="res://scenes/game_object/player/Player_controller.gd" id="6_8creh"]
+[ext_resource type="PackedScene" uid="uid://b6f23hws4kxja" path="res://scenes/game_object/player/player.tscn" id="7_gs62f"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_a6rfc"]
+material = ExtResource("2_1dolj")
+size = Vector2(1000, 1000)
+subdivide_width = 1
+subdivide_depth = 1
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_0ewos"]
+data = PackedVector3Array(500, 0, 500, 0, 0, 500, 500, 0, 0, 0, 0, 500, 0, 0, 0, 500, 0, 0, 0, 0, 500, -500, 0, 500, 0, 0, 0, -500, 0, 500, -500, 0, 0, 0, 0, 0, 500, 0, 0, 0, 0, 0, 500, 0, -500, 0, 0, 0, 0, 0, -500, 500, 0, -500, 0, 0, 0, -500, 0, 0, 0, 0, -500, -500, 0, 0, -500, 0, -500, 0, 0, -500)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_4nc45"]
+shader = ExtResource("5_kqnpa")
+shader_parameter/baseColor = Color(0, 0.482353, 0.588235, 1)
+shader_parameter/horizonColor = Color(0.2322, 0.525173, 0.86, 1)
+shader_parameter/horizonHeight = 0.41
+shader_parameter/rayleighCoefficient = 0.0
+shader_parameter/mieCoefficient = 0.0
+shader_parameter/mieEccentricity = 1.0
+shader_parameter/sunDiskScale = 0.25
+shader_parameter/sunSmoothing = 0.0
+
+[sub_resource type="Sky" id="Sky_38vcp"]
+sky_material = SubResource("ShaderMaterial_4nc45")
+
+[sub_resource type="Environment" id="Environment_x2wex"]
+background_mode = 2
+sky = SubResource("Sky_38vcp")
+ambient_light_source = 3
+ambient_light_energy = 4.59
+reflected_light_source = 1
+tonemap_mode = 1
+
+[sub_resource type="BoxMesh" id="BoxMesh_yg3g3"]
+size = Vector3(0.5, 1.8, 0.5)
+
+[sub_resource type="BoxMesh" id="BoxMesh_cegxi"]
+lightmap_size_hint = Vector2i(190, 75)
+custom_aabb = AABB(0.185, 0.365, 0.16, 0.305, 0.195, 0.175)
+size = Vector3(1, 2, 1)
+subdivide_width = 57
+subdivide_height = 5
+subdivide_depth = 40
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_p4no5"]
+size = Vector3(1, 2, 1)
+
+[node name="second_lvl" type="Node3D"]
+
+[node name="Navigation" type="NavigationRegion3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -4.76837e-07, 9.53674e-07)
+navigation_mesh = ExtResource("1_b7ha7")
+
+[node name="floor" type="MeshInstance3D" parent="Navigation"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.76837e-07, -9.53674e-07)
+mesh = SubResource("PlaneMesh_a6rfc")
+skeleton = NodePath("../..")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Navigation/floor"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Navigation/floor/StaticBody3D"]
+shape = SubResource("ConcavePolygonShape3D_0ewos")
+
+[node name="Enviroment" type="Node3D" parent="."]
+
+[node name="Tree" type="Sprite3D" parent="Enviroment"]
+transform = Transform3D(14, 0, 0, 0, 14, 0, 0, 0, 14, -10.8691, 6, -9.99208)
+texture = ExtResource("3_a6c80")
+
+[node name="MultiMeshGrassFloor" parent="Enviroment/Tree" instance=ExtResource("4_funwv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.427447, 0)
+
+[node name="MultiMeshGrassFloor5" parent="Enviroment/Tree" instance=ExtResource("4_funwv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.354429, -0.427447, -0.0874962)
+
+[node name="MultiMeshGrassFloor2" parent="Enviroment/Tree" instance=ExtResource("4_funwv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.3274, -0.427447, 0.363192)
+
+[node name="MultiMeshGrassFloor3" parent="Enviroment/Tree" instance=ExtResource("4_funwv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.393352, -0.427448, 0.511261)
+
+[node name="MultiMeshGrassFloor4" parent="Enviroment/Tree" instance=ExtResource("4_funwv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.110524, -0.427447, 0.363192)
+
+[node name="WorldCam" type="Camera3D" parent="Enviroment"]
+transform = Transform3D(0.914254, -0.0925144, 0.394437, 0, 0.973579, 0.228351, -0.405142, -0.208771, 0.890098, -0.57, 3.641, 12.916)
+current = true
+fov = 29.8
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="Enviroment"]
+environment = SubResource("Environment_x2wex")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="Enviroment/WorldEnvironment"]
+transform = Transform3D(-0.780382, -0.605231, 0.157162, -0.547328, 0.782684, 0.296376, -0.302384, 0.145267, -0.942052, -88.8742, 27.8281, 26.8689)
+light_energy = 0.385
+light_bake_mode = 1
+shadow_enabled = true
+
+[node name="StatueSquare" type="MeshInstance3D" parent="Enviroment"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.583, 0.9, -2.66)
+mesh = SubResource("BoxMesh_yg3g3")
+skeleton = NodePath("../../Player")
+
+[node name="AirSquare" type="MeshInstance3D" parent="Enviroment"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 5.00344, 5)
+mesh = SubResource("BoxMesh_cegxi")
+skeleton = NodePath("Rigid")
+
+[node name="Rigid" type="RigidBody3D" parent="Enviroment/AirSquare"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Enviroment/AirSquare/Rigid"]
+shape = SubResource("BoxShape3D_p4no5")
+
+[node name="Player_controller" type="Node3D" parent="."]
+script = ExtResource("6_8creh")
+
+[node name="Player" parent="." instance=ExtResource("7_gs62f")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.94937, 0.5, -1.16227)

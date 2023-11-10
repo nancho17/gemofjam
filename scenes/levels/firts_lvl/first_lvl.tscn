@@ -1,0 +1,222 @@
+[gd_scene load_steps=30 format=3 uid="uid://cqfpaf3ukwfdm"]
+
+[ext_resource type="NavigationMesh" uid="uid://bkan8caithbs7" path="res://scenes/game_object/ambient/navigation/nav_mesh_frst.tres" id="1_fpn3c"]
+[ext_resource type="Material" uid="uid://0wmrf684ohq" path="res://scenes/game_object/ambient/floors/brick_stone_floor.tres" id="2_sf6l2"]
+[ext_resource type="Shader" path="res://scenes/game_object/ambient/sky/asky.gdshader" id="3_1y247"]
+[ext_resource type="Texture2D" uid="uid://tidxyo7lsd1s" path="res://assets/textures/Sand 2.jpg" id="3_t0dkb"]
+[ext_resource type="PackedScene" uid="uid://c6y3kch24eg0k" path="res://scenes/game_object/ambient/wata/water.tscn" id="4_11xa1"]
+[ext_resource type="PackedScene" uid="uid://dgh3bd5cb4ko0" path="res://scenes/game_object/enemy/basics/basic_guana.tscn" id="5_8dfin"]
+[ext_resource type="PackedScene" uid="uid://bnhrmm8x68n4m" path="res://scenes/game_object/enemy/basics/basic_snake.tscn" id="6_anfio"]
+[ext_resource type="Shader" path="res://scenes/levels/firts_lvl/first_lvl.gdshader" id="6_qr3sa"]
+[ext_resource type="PackedScene" uid="uid://b6f23hws4kxja" path="res://scenes/game_object/player/player.tscn" id="7_ic4v0"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_fl0o8"]
+material = ExtResource("2_sf6l2")
+size = Vector2(1000, 1000)
+subdivide_width = 1
+subdivide_depth = 1
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_jr44a"]
+albedo_texture = ExtResource("3_t0dkb")
+uv1_scale = Vector3(500, 5, 0)
+
+[sub_resource type="PrismMesh" id="PrismMesh_f8q2r"]
+material = SubResource("StandardMaterial3D_jr44a")
+size = Vector3(40, 6, 1000)
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_0ewos"]
+data = PackedVector3Array(500, 0, 500, 0, 0, 500, 500, 0, 0, 0, 0, 500, 0, 0, 0, 500, 0, 0, 0, 0, 500, -500, 0, 500, 0, 0, 0, -500, 0, 500, -500, 0, 0, 0, 0, 0, 500, 0, 0, 0, 0, 0, 500, 0, -500, 0, 0, 0, 0, 0, -500, 500, 0, -500, 0, 0, 0, -500, 0, 0, 0, 0, -500, -500, 0, 0, -500, 0, -500, 0, 0, -500)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_274qo"]
+noise_type = 0
+fractal_octaves = 1
+fractal_lacunarity = 2.9
+fractal_gain = 3.32
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_yy4lu"]
+noise = SubResource("FastNoiseLite_274qo")
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_s2c46"]
+frequency = 0.0974
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_j81l0"]
+noise = SubResource("FastNoiseLite_s2c46")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_4nc45"]
+shader = ExtResource("3_1y247")
+shader_parameter/baseColor = Color(0, 0.64, 0.84, 1)
+shader_parameter/horizonColor = Color(0.36, 0.59, 0.86, 1)
+shader_parameter/horizonHeight = 1.0
+shader_parameter/rayleighCoefficient = 0.07
+shader_parameter/mieCoefficient = 0.14
+shader_parameter/mieEccentricity = 0.8
+shader_parameter/sunDiskScale = 0.2
+shader_parameter/sunSmoothing = 0.5
+shader_parameter/cloudTexture = SubResource("NoiseTexture2D_j81l0")
+shader_parameter/cloudCoverageTexture = SubResource("NoiseTexture2D_yy4lu")
+
+[sub_resource type="Sky" id="Sky_38vcp"]
+sky_material = SubResource("ShaderMaterial_4nc45")
+
+[sub_resource type="Environment" id="Environment_x2wex"]
+background_mode = 2
+sky = SubResource("Sky_38vcp")
+ambient_light_source = 3
+ambient_light_sky_contribution = 0.55
+reflected_light_source = 1
+tonemap_mode = 1
+tonemap_white = 0.49
+
+[sub_resource type="BoxMesh" id="BoxMesh_yg3g3"]
+size = Vector3(0.5, 1.8, 0.5)
+
+[sub_resource type="BoxMesh" id="BoxMesh_cegxi"]
+lightmap_size_hint = Vector2i(190, 75)
+custom_aabb = AABB(0.185, 0.365, 0.16, 0.305, 0.195, 0.175)
+size = Vector3(1, 2, 1)
+subdivide_width = 57
+subdivide_height = 5
+subdivide_depth = 40
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_p4no5"]
+size = Vector3(1, 2, 1)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_qyju6"]
+fractal_type = 0
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_0sspy"]
+seamless = true
+noise = SubResource("FastNoiseLite_qyju6")
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_4t35i"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_vr3ks"]
+seamless = true
+noise = SubResource("FastNoiseLite_4t35i")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_scllk"]
+render_priority = 0
+shader = ExtResource("6_qr3sa")
+shader_parameter/albedo = Color(0.02, 0.45, 0.8, 1)
+shader_parameter/transparency = 0.64
+shader_parameter/metallic = 0.0
+shader_parameter/roughness = 0.5
+shader_parameter/surface_normals_move_direction_a = Vector2(-1, 0)
+shader_parameter/surface_normals_move_direction_b = Vector2(0, 1)
+shader_parameter/surface_texture_roughness = 0.41
+shader_parameter/surface_texture_scale = 0.125
+shader_parameter/surface_texture_time_scale = 0.06
+shader_parameter/ssr_resolution = 0.1
+shader_parameter/ssr_max_travel = 0.1
+shader_parameter/ssr_max_diff = 0.1
+shader_parameter/ssr_mix_strength = 0.0
+shader_parameter/wave_noise_scale = 15.0
+shader_parameter/wave_height_scale = 0.945
+shader_parameter/wave_time_scale = 0.025
+shader_parameter/wave_normal_flatness = 30.0
+shader_parameter/border_color = Color(1, 1, 1, 1)
+shader_parameter/border_scale = 5.0
+shader_parameter/border_near = 0.5
+shader_parameter/border_far = 300.0
+shader_parameter/refraction_intensity = 0.4
+shader_parameter/max_visible_depth = 10.0
+shader_parameter/color_deep = Color(0, 0.1, 0.4, 1)
+shader_parameter/wave_a = SubResource("NoiseTexture2D_vr3ks")
+shader_parameter/surface_normals_a = SubResource("NoiseTexture2D_0sspy")
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_a3fss"]
+material = SubResource("ShaderMaterial_scllk")
+size = Vector2(25, 25)
+subdivide_width = 40
+subdivide_depth = 40
+
+[node name="first_lvl" type="Node3D"]
+
+[node name="Navigation" type="NavigationRegion3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -475)
+navigation_mesh = ExtResource("1_fpn3c")
+
+[node name="floor" type="MeshInstance3D" parent="Navigation"]
+mesh = SubResource("PlaneMesh_fl0o8")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Navigation/floor"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 3.353, -3, 500)
+mesh = SubResource("PrismMesh_f8q2r")
+skeleton = NodePath("../../../Enviroment/Water")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Navigation/floor"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Navigation/floor/StaticBody3D"]
+shape = SubResource("ConcavePolygonShape3D_0ewos")
+
+[node name="Enviroment" type="Node3D" parent="."]
+
+[node name="Coral" type="Sprite3D" parent="Enviroment"]
+transform = Transform3D(14, 0, 0, 0, 14, 0, 0, 0, 14, -10.8691, 6, -9.99208)
+
+[node name="Water" parent="Enviroment" instance=ExtResource("4_11xa1")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, -0.938956, 48.5291)
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="Enviroment"]
+environment = SubResource("Environment_x2wex")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="Enviroment/WorldEnvironment"]
+transform = Transform3D(-0.780382, -0.605231, 0.157162, -0.547328, 0.782684, 0.296376, -0.302384, 0.145267, -0.942052, -88.8742, 27.8281, 26.8689)
+light_energy = 0.385
+light_bake_mode = 1
+shadow_enabled = true
+
+[node name="StatueSquare" type="MeshInstance3D" parent="Enviroment"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.583, 0.9, -2.66)
+visible = false
+mesh = SubResource("BoxMesh_yg3g3")
+skeleton = NodePath("../../Player")
+
+[node name="AirSquare" type="MeshInstance3D" parent="Enviroment"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 5.00344, 5)
+visible = false
+mesh = SubResource("BoxMesh_cegxi")
+skeleton = NodePath("Rigid")
+
+[node name="Rigid" type="RigidBody3D" parent="Enviroment/AirSquare"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Enviroment/AirSquare/Rigid"]
+shape = SubResource("BoxShape3D_p4no5")
+
+[node name="Camera3D" type="Camera3D" parent="Enviroment"]
+transform = Transform3D(0.0174524, -0.999848, -4.37114e-08, 7.62869e-10, -4.37047e-08, 1, -0.999848, -0.0174524, 1.91068e-15, 21.125, 115.735, 46.885)
+projection = 1
+fov = 76.5
+size = 20.0
+
+[node name="aquaaquea" type="MeshInstance3D" parent="Enviroment"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.6857, -2.49846, 42.9155)
+visible = false
+mesh = SubResource("PlaneMesh_a3fss")
+
+[node name="Player" parent="." instance=ExtResource("7_ic4v0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.112, 0.5, 15)
+
+[node name="EnemySquad" type="Node3D" parent="."]
+
+[node name="BasicGuana" parent="EnemySquad" instance=ExtResource("5_8dfin")]
+transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, 2.7619, 0, -13.9714)
+
+[node name="BasicGuana2" parent="EnemySquad" instance=ExtResource("5_8dfin")]
+transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, 1.9536, 0, -19.5735)
+
+[node name="BasicGuana3" parent="EnemySquad" instance=ExtResource("5_8dfin")]
+transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, -4.01758, 0, -16.7948)
+
+[node name="BasicGuana4" parent="EnemySquad" instance=ExtResource("5_8dfin")]
+transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, 1.10613, 0, -10.0572)
+
+[node name="BasicGuana5" parent="EnemySquad" instance=ExtResource("5_8dfin")]
+transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, -2.38786, 0, -12.546)
+
+[node name="BasicGuana6" parent="EnemySquad" instance=ExtResource("5_8dfin")]
+transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, -6.58676, 0, -13.8425)
+
+[node name="BasicSnake" parent="EnemySquad" instance=ExtResource("6_anfio")]
+transform = Transform3D(6, 0, 0, 0, 6, 0, 0, 0, 6, -0.321614, 0, -14.5981)

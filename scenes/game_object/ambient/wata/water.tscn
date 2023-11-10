@@ -1,0 +1,14 @@
+[gd_scene load_steps=3 format=3 uid="uid://c6y3kch24eg0k"]
+
+[ext_resource type="PlaneMesh" uid="uid://c3x01nhw7mb5n" path="res://scenes/game_object/ambient/wata/water_mesh.tres" id="1_fejrb"]
+
+[sub_resource type="MultiMesh" id="MultiMesh_okl3o"]
+transform_format = 1
+instance_count = 20
+visible_instance_count = 20
+mesh = ExtResource("1_fejrb")
+buffer = PackedFloat32Array(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, -500, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, -450, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, -400, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, -350, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, -300, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, -250, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, -200, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, -150, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, -100, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, -50, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 50, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 100, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 150, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 200, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 250, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 300, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 350, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 400, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 450)
+
+[node name="Water" type="MultiMeshInstance3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.99178, 0, -14.9083)
+multimesh = SubResource("MultiMesh_okl3o")

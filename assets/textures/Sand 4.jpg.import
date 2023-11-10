@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bwfb8mxcvpb4w"
-path.s3tc="res://.godot/imported/snakescale.jpg-e041d5dd5f63900962ac05a1a90c515a.s3tc.ctex"
+uid="uid://bsohuod5iv56d"
+path.s3tc="res://.godot/imported/Sand 4.jpg-1286a863ab53e860b228ef983638250f.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://assets/textures/snakescale.jpg"
-dest_files=["res://.godot/imported/snakescale.jpg-e041d5dd5f63900962ac05a1a90c515a.s3tc.ctex"]
+source_file="res://assets/textures/Sand 4.jpg"
+dest_files=["res://.godot/imported/Sand 4.jpg-1286a863ab53e860b228ef983638250f.s3tc.ctex"]
 
 [params]
 

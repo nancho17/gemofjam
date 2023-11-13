@@ -184,21 +184,16 @@ skeleton = NodePath("Rigid")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Enviroment/AirSquare/Rigid"]
 shape = SubResource("BoxShape3D_p4no5")
 
-[node name="Camera3D" type="Camera3D" parent="Enviroment"]
-transform = Transform3D(0.0174524, -0.999848, -4.37114e-08, 7.62869e-10, -4.37047e-08, 1, -0.999848, -0.0174524, 1.91068e-15, 21.125, 115.735, 46.885)
-projection = 1
-fov = 76.5
-size = 20.0
-
 [node name="aquaaquea" type="MeshInstance3D" parent="Enviroment"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.6857, -2.49846, 42.9155)
 visible = false
 mesh = SubResource("PlaneMesh_a3fss")
 
 [node name="Player" parent="." instance=ExtResource("7_ic4v0")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.112, 0.5, 15)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.112, 0.5, -30.7439)
 
 [node name="EnemySquad" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -36.0243)
 
 [node name="BasicGuana" parent="EnemySquad" instance=ExtResource("5_8dfin")]
 transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, 2.7619, 0, -13.9714)

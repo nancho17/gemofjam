@@ -1,22 +1,71 @@
-[gd_scene load_steps=4 format=3 uid="uid://b6f23hws4kxja"]
+[gd_scene load_steps=9 format=3 uid="uid://b6f23hws4kxja"]
 
 [ext_resource type="Script" path="res://scenes/game_object/player/Player.gd" id="1_fiw6x"]
 [ext_resource type="Script" path="res://scenes/game_object/player/Player_controller.gd" id="2_4f7sj"]
 [ext_resource type="PackedScene" uid="uid://dt5wokxf4spds" path="res://scenes/game_object/player/knight_standing.tscn" id="2_nexdr"]
+[ext_resource type="Script" path="res://scenes/game_object/player/PlayerCam.gd" id="3_766ov"]
+[ext_resource type="Shader" path="res://scenes/game_object/player/skill_q.gdshader" id="5_jlxt2"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_ar4ly"]
+radius = 5.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_3l7ir"]
+render_priority = 0
+shader = ExtResource("5_jlxt2")
+shader_parameter/color = Color(0.0745098, 0.47451, 0.631373, 1)
+shader_parameter/density = 0.54
+shader_parameter/radial_res = 12.0
+shader_parameter/angular_res = 12.0
+shader_parameter/line_space = 0.37
+shader_parameter/revolutions = 18.08
+shader_parameter/emission = 1.81
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_v28fc"]
+material = SubResource("ShaderMaterial_3l7ir")
+size = Vector2(10, 10)
+subdivide_width = 20
+subdivide_depth = 20
 
 [node name="Player" type="Node3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 script = ExtResource("1_fiw6x")
 
-[node name="Player_controller" type="Node3D" parent="."]
+[node name="Player_controller" type="Node" parent="."]
 script = ExtResource("2_4f7sj")
 
 [node name="PlayerCam" type="Camera3D" parent="."]
 transform = Transform3D(0.71934, -0.569031, 0.39844, 0, 0.573576, 0.819152, -0.694658, -0.589249, 0.412596, 2.3, 5, 2.3)
 size = 20.0
+script = ExtResource("3_766ov")
 
 [node name="Character" type="Node3D" parent="."]
 transform = Transform3D(0.315, 0, 0, 0, 0.315, 0, 0, 0, 0.315, 0, -0.25, 0)
 
 [node name="CharacterBody" parent="Character" instance=ExtResource("2_nexdr")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+
+[node name="Skills" type="Node3D" parent="Character"]
+
+[node name="Qskill" type="Area3D" parent="Character/Skills"]
+transform = Transform3D(3.1746, 0, 0, 0, 3.1746, 0, 0, 0, 3.1746, 0, 2.38095, 0)
+
+[node name="Front" type="CollisionShape3D" parent="Character/Skills/Qskill"]
+transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, 5, 0, 0)
+shape = SubResource("SphereShape3D_ar4ly")
+
+[node name="Sprite3D" type="MeshInstance3D" parent="Character/Skills/Qskill/Front"]
+mesh = SubResource("PlaneMesh_v28fc")
+
+[node name="Right" type="CollisionShape3D" parent="Character/Skills/Qskill"]
+transform = Transform3D(0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, 0.707107, 0, 0, 5)
+shape = SubResource("SphereShape3D_ar4ly")
+
+[node name="Sprite3D" type="MeshInstance3D" parent="Character/Skills/Qskill/Right"]
+mesh = SubResource("PlaneMesh_v28fc")
+
+[node name="Left" type="CollisionShape3D" parent="Character/Skills/Qskill"]
+transform = Transform3D(-0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, -0.707107, 0, 1, -5)
+shape = SubResource("SphereShape3D_ar4ly")
+
+[node name="Sprite3D" type="MeshInstance3D" parent="Character/Skills/Qskill/Left"]
+mesh = SubResource("PlaneMesh_v28fc")

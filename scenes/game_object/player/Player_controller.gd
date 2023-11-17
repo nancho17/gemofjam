@@ -3,11 +3,11 @@ extends Node
 # Exports
 @onready var player_main = $".."
 @onready var character = $"../Character"
+@onready var character_skills = $"../Character/Skills"
 
 var camera_one : Camera3D
 var default_3d_map_rid : RID
 
-# Resource Player
 var movement_speed: float = 4.0
 
 # Command vars
@@ -42,7 +42,7 @@ func _process(_delta: float):
 	if Input.is_action_just_pressed("q_skill"):
 		process_movement = false
 		q_test += 1 
-		prints("qu",q_test)
+		character_skills.q_skill()
 
 	if Input.is_action_just_pressed("w_skill"):
 		process_movement = false

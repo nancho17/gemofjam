@@ -3,7 +3,6 @@ extends Camera3D
 var camera_zoom : int = 0
 var original_pos
 
-# Called when the node enters the scene tree for the first time.
 func _ready():
 	original_pos = position
 	set_process_priority(10)

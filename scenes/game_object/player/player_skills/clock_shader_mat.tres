@@ -1,0 +1,27 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://cdkhah3q5ex2a"]
+
+[ext_resource type="Shader" path="res://scenes/game_object/player/player_skills/clock.gdshader" id="1_qusgf"]
+
+[resource]
+shader = ExtResource("1_qusgf")
+shader_parameter/indictor_color = Color(0, 0, 0, 1)
+shader_parameter/border_color = Color(0.5, 0.5, 0.5, 1)
+shader_parameter/centre_color = Color(0, 0, 0, 1)
+shader_parameter/sector_color = Color(0.54902, 0, 0.0862745, 1)
+shader_parameter/scale_mark_color = Color(0, 0, 0, 1)
+shader_parameter/show_edges = true
+shader_parameter/indicator_angle = 0.0
+shader_parameter/indicator_length = 0.65
+shader_parameter/border_width = 0.182
+shader_parameter/centre_width = 0.1
+shader_parameter/sector1 = 0.5
+shader_parameter/sector2 = 0.75
+shader_parameter/sector_end = 1.0
+shader_parameter/scale_marks = 16.0
+shader_parameter/major_scale_marks = 4.0
+shader_parameter/scale_mark_width = 0.02
+shader_parameter/scale_outer = 0.85
+shader_parameter/scale_minor_inner = 0.75
+shader_parameter/scale_major_inner = 0.65
+shader_parameter/indicator_width = 0.005
+shader_parameter/time_timeout = 4.0

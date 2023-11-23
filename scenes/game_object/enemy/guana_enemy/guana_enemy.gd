@@ -4,7 +4,6 @@ extends Node3D
 @onready var life_progress_bar = $Bars/LifeViewport/LifeProgressBar
 @onready var label = $Bars/LifeViewport/Label
 
-
 var current_health : int
 
 func _ready():
@@ -25,10 +24,11 @@ func from_composed_damage(received_damage : int):
 
 func decrease_health(health_delta : int):
 	current_health = max(current_health - health_delta,0)
+	prints(self,current_health )
 	life_progress_bar.set_value(current_health)
-	var eme = "H %s" % current_health
+	var eme = "H%s" % current_health
 	label.set_text(eme)
 	if current_health == 0:
 		prints("this is dead")
-		current_health = stats.max_health
+
 

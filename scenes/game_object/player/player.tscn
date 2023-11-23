@@ -1,13 +1,370 @@
-[gd_scene load_steps=15 format=3 uid="uid://b6f23hws4kxja"]
+[gd_scene load_steps=52 format=3 uid="uid://b6f23hws4kxja"]
 
 [ext_resource type="Script" path="res://scenes/game_object/player/Player.gd" id="1_fiw6x"]
 [ext_resource type="Script" path="res://scenes/game_object/player/Player_controller.gd" id="2_4f7sj"]
+[ext_resource type="Script" path="res://scenes/game_object/player/PlayerInterface.gd" id="2_kmbv1"]
 [ext_resource type="PackedScene" uid="uid://dt5wokxf4spds" path="res://scenes/game_object/player/knight_standing.tscn" id="2_nexdr"]
+[ext_resource type="Texture2D" uid="uid://ccbisoyc6x7sj" path="res://assets/textures/gui/White/White.png" id="2_rk8sd"]
 [ext_resource type="Texture2D" uid="uid://drt5kod16lia2" path="res://assets/textures/gui/Red/Red.png" id="3_2dyg5"]
 [ext_resource type="Script" path="res://scenes/game_object/player/PlayerCam.gd" id="3_766ov"]
 [ext_resource type="Texture2D" uid="uid://xgnqk8b7ffx5" path="res://assets/textures/gui/Green/Green.png" id="3_mteea"]
 [ext_resource type="Script" path="res://scenes/game_object/player/Skills.gd" id="5_ikcjv"]
-[ext_resource type="Shader" path="res://scenes/game_object/player/skill_q.gdshader" id="5_jlxt2"]
+[ext_resource type="Script" path="res://scenes/game_object/player/Clock.gd" id="6_84v7h"]
+[ext_resource type="Script" path="res://scenes/game_object/player/player_skills/q_skill.gd" id="8_tqs71"]
+[ext_resource type="PlaneMesh" uid="uid://3be4da21oisb" path="res://scenes/game_object/player/player_skills/blue_bomb.tres" id="9_fu7a0"]
+[ext_resource type="PlaneMesh" uid="uid://csaic0xqrw6r4" path="res://scenes/game_object/player/player_skills/red_bomb.tres" id="10_03v5x"]
+[ext_resource type="Script" path="res://scenes/game_object/player/player_skills/e_skill.gd" id="10_krv2w"]
+[ext_resource type="Script" path="res://scenes/game_object/player/player_skills/w_skill.gd" id="14_6actw"]
+[ext_resource type="Shader" path="res://scenes/game_object/player/player_skills/fire_hameha.gdshader" id="17_3k4l1"]
+[ext_resource type="Script" path="res://scenes/game_object/player/player_skills/r_skill.gd" id="17_ltfo0"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vve6h"]
+atlas = ExtResource("2_rk8sd")
+region = Rect2(191.729, 96.2428, 16.4859, 15.9454)
+
+[sub_resource type="Shader" id="Shader_nqkea"]
+code = "//	Dial shader v2 by Brian Smith (steampunkdemon.itch.io)
+//	MIT Licence
+
+shader_type canvas_item;
+
+uniform vec4 indictor_color : source_color = vec4(0.0, 0.0, 0.0, 1.0);
+uniform vec4 border_color : source_color = vec4(0.5, 0.5, 0.5, 1.0);
+uniform vec4 centre_color : source_color = vec4(0.0, 0.0, 0.0, 1.0);
+uniform vec4 sector_color : source_color = vec4(1.0, 0.0, 0.0, 1.0);
+uniform vec4 scale_mark_color : source_color = vec4(0.0, 0.0, 0.0, 1.0);
+
+uniform bool show_edges = false;
+uniform float indicator_angle : hint_range(0.0, 1.0) = 0.0;
+uniform float indicator_length : hint_range(0.1, 1.0) = 0.65;
+uniform float border_width : hint_range(0.0, 0.5) = 0.1;
+uniform float centre_width : hint_range(0.0, 0.5) = 0.1;
+uniform float sector1 : hint_range(0.0, 1.0) = 0.5;
+uniform float sector2 : hint_range(0.0, 1.0) = 0.75;
+uniform float sector_end : hint_range(0.0, 1.0) = 1.0;
+uniform float scale_marks : hint_range(0.0, 20.0, 1.0) = 16.0;
+uniform float major_scale_marks : hint_range(0.0, 20.0, 1.0) = 4.0;
+uniform float scale_mark_width : hint_range(0.01, 0.1) = 0.02;
+uniform float scale_outer : hint_range(0.0, 1.0) = 0.85;
+uniform float scale_minor_inner : hint_range(0.0, 1.0) = 0.75;
+uniform float scale_major_inner : hint_range(0.0, 1.0) = 0.65;
+uniform float indicator_width : hint_range(0.001, 0.01) = 0.005;
+uniform float time_timeout : hint_range(0.500, 120) = 4.0;
+
+float greater_than(float x, float y) {
+  return max(sign(x - y), 0.0);
+}
+
+void fragment() {
+	vec2 uv = UV * 2.0 - 1.0;
+	float a = (atan(-uv.x, uv.y) + 3.141592656) / 6.283185312;
+	float l = length(uv);
+
+
+	COLOR.rgb = mix(COLOR.rgb, sector_color.rgb, sector_color.a * (greater_than(a, indicator_angle) * greater_than(sector_end, a)));
+
+	COLOR.rgb = mix(COLOR.rgb, scale_mark_color.rgb, scale_mark_color.a * greater_than(abs(mod(a, 1.0 / scale_marks) * scale_marks * 2.0 - 1.0), 1.0 - (scale_mark_width / 6.283185312 / l) * scale_marks) * (greater_than(scale_outer, l) * greater_than(l, scale_minor_inner)));
+	COLOR.rgb = mix(COLOR.rgb, scale_mark_color.rgb, scale_mark_color.a * greater_than(abs(mod(a, 1.0 / major_scale_marks) * major_scale_marks * 2.0 - 1.0), 1.0 - (scale_mark_width / 6.283185312 / l) * major_scale_marks) * (greater_than(scale_minor_inner, l) * greater_than(l, scale_major_inner)));
+
+	COLOR.rgb = mix(COLOR.rgb, indictor_color.rgb, indictor_color.a * greater_than(indicator_length, l) * greater_than(indicator_width / l, abs(indicator_angle - (a + 1.0 * greater_than(-0.5, a - indicator_angle) - 1.0 * greater_than(a - indicator_angle, 0.5)))));
+
+	COLOR.a *= max(sign(1.0 - l), 1.0);
+}"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_5wbkd"]
+shader = SubResource("Shader_nqkea")
+shader_parameter/indictor_color = Color(0, 0, 0, 1)
+shader_parameter/border_color = Color(0.5, 0.5, 0.5, 1)
+shader_parameter/centre_color = Color(0, 0, 0, 1)
+shader_parameter/sector_color = Color(0.54902, 0, 0.0862745, 1)
+shader_parameter/scale_mark_color = Color(0, 0, 0, 1)
+shader_parameter/show_edges = true
+shader_parameter/indicator_angle = 0.0
+shader_parameter/indicator_length = 0.65
+shader_parameter/border_width = 0.182
+shader_parameter/centre_width = 0.1
+shader_parameter/sector1 = 0.5
+shader_parameter/sector2 = 0.75
+shader_parameter/sector_end = 1.0
+shader_parameter/scale_marks = 16.0
+shader_parameter/major_scale_marks = 4.0
+shader_parameter/scale_mark_width = 0.02
+shader_parameter/scale_outer = 0.85
+shader_parameter/scale_minor_inner = 0.75
+shader_parameter/scale_major_inner = 0.65
+shader_parameter/indicator_width = 0.005
+shader_parameter/time_timeout = 4.0
+
+[sub_resource type="Gradient" id="Gradient_0a532"]
+colors = PackedColorArray(0, 0, 0, 0.592157, 0.941176, 0.6, 0.713726, 0.972549)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_gd2hv"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_pwru6"]
+width = 40
+height = 40
+seamless = true
+seamless_blend_skirt = 0.327
+color_ramp = SubResource("Gradient_0a532")
+noise = SubResource("FastNoiseLite_gd2hv")
+
+[sub_resource type="Shader" id="Shader_4tnq0"]
+code = "//	Dial shader v2 by Brian Smith (steampunkdemon.itch.io)
+//	MIT Licence
+
+shader_type canvas_item;
+
+uniform vec4 indictor_color : source_color = vec4(0.0, 0.0, 0.0, 1.0);
+uniform vec4 border_color : source_color = vec4(0.5, 0.5, 0.5, 1.0);
+uniform vec4 centre_color : source_color = vec4(0.0, 0.0, 0.0, 1.0);
+uniform vec4 sector_color : source_color = vec4(1.0, 0.0, 0.0, 1.0);
+uniform vec4 scale_mark_color : source_color = vec4(0.0, 0.0, 0.0, 1.0);
+
+uniform bool show_edges = false;
+uniform float indicator_angle : hint_range(0.0, 1.0) = 0.0;
+uniform float indicator_length : hint_range(0.1, 1.0) = 0.65;
+uniform float border_width : hint_range(0.0, 0.5) = 0.1;
+uniform float centre_width : hint_range(0.0, 0.5) = 0.1;
+uniform float sector1 : hint_range(0.0, 1.0) = 0.5;
+uniform float sector2 : hint_range(0.0, 1.0) = 0.75;
+uniform float sector_end : hint_range(0.0, 1.0) = 1.0;
+uniform float scale_marks : hint_range(0.0, 20.0, 1.0) = 16.0;
+uniform float major_scale_marks : hint_range(0.0, 20.0, 1.0) = 4.0;
+uniform float scale_mark_width : hint_range(0.01, 0.1) = 0.02;
+uniform float scale_outer : hint_range(0.0, 1.0) = 0.85;
+uniform float scale_minor_inner : hint_range(0.0, 1.0) = 0.75;
+uniform float scale_major_inner : hint_range(0.0, 1.0) = 0.65;
+uniform float indicator_width : hint_range(0.001, 0.01) = 0.005;
+uniform float time_timeout : hint_range(0.500, 120) = 4.0;
+
+float greater_than(float x, float y) {
+  return max(sign(x - y), 0.0);
+}
+
+void fragment() {
+	vec2 uv = UV * 2.0 - 1.0;
+	float a = (atan(-uv.x, uv.y) + 3.141592656) / 6.283185312;
+	float l = length(uv);
+
+
+	COLOR.rgb = mix(COLOR.rgb, sector_color.rgb, sector_color.a * (greater_than(a, indicator_angle) * greater_than(sector_end, a)));
+
+	COLOR.rgb = mix(COLOR.rgb, scale_mark_color.rgb, scale_mark_color.a * greater_than(abs(mod(a, 1.0 / scale_marks) * scale_marks * 2.0 - 1.0), 1.0 - (scale_mark_width / 6.283185312 / l) * scale_marks) * (greater_than(scale_outer, l) * greater_than(l, scale_minor_inner)));
+	COLOR.rgb = mix(COLOR.rgb, scale_mark_color.rgb, scale_mark_color.a * greater_than(abs(mod(a, 1.0 / major_scale_marks) * major_scale_marks * 2.0 - 1.0), 1.0 - (scale_mark_width / 6.283185312 / l) * major_scale_marks) * (greater_than(scale_minor_inner, l) * greater_than(l, scale_major_inner)));
+
+	COLOR.rgb = mix(COLOR.rgb, indictor_color.rgb, indictor_color.a * greater_than(indicator_length, l) * greater_than(indicator_width / l, abs(indicator_angle - (a + 1.0 * greater_than(-0.5, a - indicator_angle) - 1.0 * greater_than(a - indicator_angle, 0.5)))));
+
+	COLOR.a *= max(sign(1.0 - l), 1.0);
+}"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_risyf"]
+shader = SubResource("Shader_4tnq0")
+shader_parameter/indictor_color = Color(0, 0, 0, 1)
+shader_parameter/border_color = Color(0.5, 0.5, 0.5, 1)
+shader_parameter/centre_color = Color(0, 0, 0, 1)
+shader_parameter/sector_color = Color(0.54902, 0, 0.0862745, 1)
+shader_parameter/scale_mark_color = Color(0, 0, 0, 1)
+shader_parameter/show_edges = true
+shader_parameter/indicator_angle = 0.0
+shader_parameter/indicator_length = 0.65
+shader_parameter/border_width = 0.182
+shader_parameter/centre_width = 0.1
+shader_parameter/sector1 = 0.5
+shader_parameter/sector2 = 0.75
+shader_parameter/sector_end = 1.0
+shader_parameter/scale_marks = 16.0
+shader_parameter/major_scale_marks = 4.0
+shader_parameter/scale_mark_width = 0.02
+shader_parameter/scale_outer = 0.85
+shader_parameter/scale_minor_inner = 0.75
+shader_parameter/scale_major_inner = 0.65
+shader_parameter/indicator_width = 0.005
+shader_parameter/time_timeout = 4.0
+
+[sub_resource type="Gradient" id="Gradient_lntc5"]
+colors = PackedColorArray(0, 0, 0, 0.592157, 0.941176, 0.6, 0.713726, 0.972549)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_kxlgc"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_2v4iw"]
+width = 40
+height = 40
+seamless = true
+seamless_blend_skirt = 0.327
+color_ramp = SubResource("Gradient_lntc5")
+noise = SubResource("FastNoiseLite_kxlgc")
+
+[sub_resource type="Shader" id="Shader_dxr5i"]
+code = "//	Dial shader v2 by Brian Smith (steampunkdemon.itch.io)
+//	MIT Licence
+
+shader_type canvas_item;
+
+uniform vec4 indictor_color : source_color = vec4(0.0, 0.0, 0.0, 1.0);
+uniform vec4 border_color : source_color = vec4(0.5, 0.5, 0.5, 1.0);
+uniform vec4 centre_color : source_color = vec4(0.0, 0.0, 0.0, 1.0);
+uniform vec4 sector_color : source_color = vec4(1.0, 0.0, 0.0, 1.0);
+uniform vec4 scale_mark_color : source_color = vec4(0.0, 0.0, 0.0, 1.0);
+
+uniform bool show_edges = false;
+uniform float indicator_angle : hint_range(0.0, 1.0) = 0.0;
+uniform float indicator_length : hint_range(0.1, 1.0) = 0.65;
+uniform float border_width : hint_range(0.0, 0.5) = 0.1;
+uniform float centre_width : hint_range(0.0, 0.5) = 0.1;
+uniform float sector1 : hint_range(0.0, 1.0) = 0.5;
+uniform float sector2 : hint_range(0.0, 1.0) = 0.75;
+uniform float sector_end : hint_range(0.0, 1.0) = 1.0;
+uniform float scale_marks : hint_range(0.0, 20.0, 1.0) = 16.0;
+uniform float major_scale_marks : hint_range(0.0, 20.0, 1.0) = 4.0;
+uniform float scale_mark_width : hint_range(0.01, 0.1) = 0.02;
+uniform float scale_outer : hint_range(0.0, 1.0) = 0.85;
+uniform float scale_minor_inner : hint_range(0.0, 1.0) = 0.75;
+uniform float scale_major_inner : hint_range(0.0, 1.0) = 0.65;
+uniform float indicator_width : hint_range(0.001, 0.01) = 0.005;
+uniform float time_timeout : hint_range(0.500, 120) = 4.0;
+
+float greater_than(float x, float y) {
+  return max(sign(x - y), 0.0);
+}
+
+void fragment() {
+	vec2 uv = UV * 2.0 - 1.0;
+	float a = (atan(-uv.x, uv.y) + 3.141592656) / 6.283185312;
+	float l = length(uv);
+
+
+	COLOR.rgb = mix(COLOR.rgb, sector_color.rgb, sector_color.a * (greater_than(a, indicator_angle) * greater_than(sector_end, a)));
+
+	COLOR.rgb = mix(COLOR.rgb, scale_mark_color.rgb, scale_mark_color.a * greater_than(abs(mod(a, 1.0 / scale_marks) * scale_marks * 2.0 - 1.0), 1.0 - (scale_mark_width / 6.283185312 / l) * scale_marks) * (greater_than(scale_outer, l) * greater_than(l, scale_minor_inner)));
+	COLOR.rgb = mix(COLOR.rgb, scale_mark_color.rgb, scale_mark_color.a * greater_than(abs(mod(a, 1.0 / major_scale_marks) * major_scale_marks * 2.0 - 1.0), 1.0 - (scale_mark_width / 6.283185312 / l) * major_scale_marks) * (greater_than(scale_minor_inner, l) * greater_than(l, scale_major_inner)));
+
+	COLOR.rgb = mix(COLOR.rgb, indictor_color.rgb, indictor_color.a * greater_than(indicator_length, l) * greater_than(indicator_width / l, abs(indicator_angle - (a + 1.0 * greater_than(-0.5, a - indicator_angle) - 1.0 * greater_than(a - indicator_angle, 0.5)))));
+
+	COLOR.a *= max(sign(1.0 - l), 1.0);
+}"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_laq03"]
+shader = SubResource("Shader_dxr5i")
+shader_parameter/indictor_color = Color(0, 0, 0, 1)
+shader_parameter/border_color = Color(0.5, 0.5, 0.5, 1)
+shader_parameter/centre_color = Color(0, 0, 0, 1)
+shader_parameter/sector_color = Color(0.54902, 0, 0.0862745, 1)
+shader_parameter/scale_mark_color = Color(0, 0, 0, 1)
+shader_parameter/show_edges = true
+shader_parameter/indicator_angle = 0.0
+shader_parameter/indicator_length = 0.65
+shader_parameter/border_width = 0.182
+shader_parameter/centre_width = 0.1
+shader_parameter/sector1 = 0.5
+shader_parameter/sector2 = 0.75
+shader_parameter/sector_end = 1.0
+shader_parameter/scale_marks = 16.0
+shader_parameter/major_scale_marks = 4.0
+shader_parameter/scale_mark_width = 0.02
+shader_parameter/scale_outer = 0.85
+shader_parameter/scale_minor_inner = 0.75
+shader_parameter/scale_major_inner = 0.65
+shader_parameter/indicator_width = 0.005
+shader_parameter/time_timeout = 4.0
+
+[sub_resource type="Gradient" id="Gradient_ce4tf"]
+colors = PackedColorArray(0, 0, 0, 0.592157, 0.941176, 0.6, 0.713726, 0.972549)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_n2xm0"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_jy3of"]
+width = 40
+height = 40
+seamless = true
+seamless_blend_skirt = 0.327
+color_ramp = SubResource("Gradient_ce4tf")
+noise = SubResource("FastNoiseLite_n2xm0")
+
+[sub_resource type="Shader" id="Shader_s74nm"]
+code = "//	Dial shader v2 by Brian Smith (steampunkdemon.itch.io)
+//	MIT Licence
+
+shader_type canvas_item;
+
+uniform vec4 indictor_color : source_color = vec4(0.0, 0.0, 0.0, 1.0);
+uniform vec4 border_color : source_color = vec4(0.5, 0.5, 0.5, 1.0);
+uniform vec4 centre_color : source_color = vec4(0.0, 0.0, 0.0, 1.0);
+uniform vec4 sector_color : source_color = vec4(1.0, 0.0, 0.0, 1.0);
+uniform vec4 scale_mark_color : source_color = vec4(0.0, 0.0, 0.0, 1.0);
+
+uniform bool show_edges = false;
+uniform float indicator_angle : hint_range(0.0, 1.0) = 0.0;
+uniform float indicator_length : hint_range(0.1, 1.0) = 0.65;
+uniform float border_width : hint_range(0.0, 0.5) = 0.1;
+uniform float centre_width : hint_range(0.0, 0.5) = 0.1;
+uniform float sector1 : hint_range(0.0, 1.0) = 0.5;
+uniform float sector2 : hint_range(0.0, 1.0) = 0.75;
+uniform float sector_end : hint_range(0.0, 1.0) = 1.0;
+uniform float scale_marks : hint_range(0.0, 20.0, 1.0) = 16.0;
+uniform float major_scale_marks : hint_range(0.0, 20.0, 1.0) = 4.0;
+uniform float scale_mark_width : hint_range(0.01, 0.1) = 0.02;
+uniform float scale_outer : hint_range(0.0, 1.0) = 0.85;
+uniform float scale_minor_inner : hint_range(0.0, 1.0) = 0.75;
+uniform float scale_major_inner : hint_range(0.0, 1.0) = 0.65;
+uniform float indicator_width : hint_range(0.001, 0.01) = 0.005;
+uniform float time_timeout : hint_range(0.500, 120) = 4.0;
+
+float greater_than(float x, float y) {
+  return max(sign(x - y), 0.0);
+}
+
+void fragment() {
+	vec2 uv = UV * 2.0 - 1.0;
+	float a = (atan(-uv.x, uv.y) + 3.141592656) / 6.283185312;
+	float l = length(uv);
+
+
+	COLOR.rgb = mix(COLOR.rgb, sector_color.rgb, sector_color.a * (greater_than(a, indicator_angle) * greater_than(sector_end, a)));
+
+	COLOR.rgb = mix(COLOR.rgb, scale_mark_color.rgb, scale_mark_color.a * greater_than(abs(mod(a, 1.0 / scale_marks) * scale_marks * 2.0 - 1.0), 1.0 - (scale_mark_width / 6.283185312 / l) * scale_marks) * (greater_than(scale_outer, l) * greater_than(l, scale_minor_inner)));
+	COLOR.rgb = mix(COLOR.rgb, scale_mark_color.rgb, scale_mark_color.a * greater_than(abs(mod(a, 1.0 / major_scale_marks) * major_scale_marks * 2.0 - 1.0), 1.0 - (scale_mark_width / 6.283185312 / l) * major_scale_marks) * (greater_than(scale_minor_inner, l) * greater_than(l, scale_major_inner)));
+
+	COLOR.rgb = mix(COLOR.rgb, indictor_color.rgb, indictor_color.a * greater_than(indicator_length, l) * greater_than(indicator_width / l, abs(indicator_angle - (a + 1.0 * greater_than(-0.5, a - indicator_angle) - 1.0 * greater_than(a - indicator_angle, 0.5)))));
+
+	COLOR.a *= max(sign(1.0 - l), 1.0);
+}"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_bpuwa"]
+shader = SubResource("Shader_s74nm")
+shader_parameter/indictor_color = Color(0, 0, 0, 1)
+shader_parameter/border_color = Color(0.5, 0.5, 0.5, 1)
+shader_parameter/centre_color = Color(0, 0, 0, 1)
+shader_parameter/sector_color = Color(0.54902, 0, 0.690196, 1)
+shader_parameter/scale_mark_color = Color(0, 0, 0, 1)
+shader_parameter/show_edges = true
+shader_parameter/indicator_angle = 0.0
+shader_parameter/indicator_length = 0.65
+shader_parameter/border_width = 0.182
+shader_parameter/centre_width = 0.1
+shader_parameter/sector1 = 0.5
+shader_parameter/sector2 = 0.75
+shader_parameter/sector_end = 1.0
+shader_parameter/scale_marks = 16.0
+shader_parameter/major_scale_marks = 4.0
+shader_parameter/scale_mark_width = 0.02
+shader_parameter/scale_outer = 0.85
+shader_parameter/scale_minor_inner = 0.75
+shader_parameter/scale_major_inner = 0.65
+shader_parameter/indicator_width = 0.005
+shader_parameter/time_timeout = 4.0
+
+[sub_resource type="Gradient" id="Gradient_axhd3"]
+colors = PackedColorArray(0, 0, 0, 0.592157, 0.941176, 0.6, 0.713726, 0.972549)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_4dr5h"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_wl5b0"]
+width = 40
+height = 40
+seamless = true
+seamless_blend_skirt = 0.327
+color_ramp = SubResource("Gradient_axhd3")
+noise = SubResource("FastNoiseLite_4dr5h")
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_g4xx7"]
 viewport_path = NodePath("Sprite3D/SubViewport")
@@ -23,10 +380,59 @@ region = Rect2(162, 130, 76, 14)
 [sub_resource type="SphereShape3D" id="SphereShape3D_ar4ly"]
 radius = 5.0
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_3l7ir"]
+[sub_resource type="Shader" id="Shader_uejpk"]
+code = "shader_type spatial;
+
+uniform vec3 color:source_color; 
+uniform float density:hint_range(0.0, 1.0, 0.01); 
+uniform float radial_res:hint_range(1, 40, 1); 
+uniform float angular_res:hint_range(1, 40, 1); 
+uniform float line_space:hint_range(0.0, 1.0, 0.01); 
+uniform float revolutions;
+uniform float emission:hint_range(0.0, 20.0, 0.01); 
+
+float circle(vec2 uv, float diameter, float feather)
+{
+    float radius = diameter/2.0;
+    return smoothstep(radius, radius -feather, length(uv - vec2(0.5)));
+}
+vec2 polar_coordinates(vec2 uv, vec2 center)
+{
+    vec2 dir = uv ;
+    float radius = length(dir) * 2.0;
+    float angle = atan(dir.y, dir.x) / TAU; 
+    return (vec2(radius, angle)); 
+}
+float random (vec2 st) {
+    return fract(sin(dot(st.xy,
+                      vec2(12.9898,78.233))) * 43758.5453123);
+}
+float randomf(float x){
+	return fract(sin(x) * 100000.0); 
+}
+void fragment() {   
+
+    vec2 res = vec2(radial_res,angular_res); 	
+    vec2 uv = polar_coordinates(UV,vec2(0.5)); 
+    vec2 igrid = floor(fract(uv)*res);
+    vec2 uv2 = polar_coordinates(UV,vec2(0.5)); 
+    uv2.y -= (revolutions*TIME*0.02) * (randomf(igrid.x)+0.1);
+
+    vec2 igrid2 = floor(fract(uv2)*res)/res;	
+    vec2 fgrid = fract(uv2*res);
+    float vsmask = step(line_space, fgrid.x);  
+    float rnd = random(igrid2); 	
+    float val = float(rnd > (1.0 - density)); 
+    float cmask = 1.0 - circle(UV,1.0,0.0); 	
+    ALBEDO = color; 
+    EMISSION = color * emission; 
+    ALPHA = val*cmask* vsmask;//val*vsmask*cmask;
+}"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ew277"]
 render_priority = 0
-shader = ExtResource("5_jlxt2")
-shader_parameter/color = Color(0.0745098, 0.47451, 0.631373, 1)
+shader = SubResource("Shader_uejpk")
+shader_parameter/color = Color(0.29, 0.2, 100, 1)
 shader_parameter/density = 0.54
 shader_parameter/radial_res = 12.0
 shader_parameter/angular_res = 12.0
@@ -34,11 +440,98 @@ shader_parameter/line_space = 0.37
 shader_parameter/revolutions = 18.08
 shader_parameter/emission = 1.81
 
-[sub_resource type="PlaneMesh" id="PlaneMesh_v28fc"]
-material = SubResource("ShaderMaterial_3l7ir")
+[sub_resource type="PlaneMesh" id="PlaneMesh_1em1a"]
+material = SubResource("ShaderMaterial_ew277")
 size = Vector2(10, 10)
 subdivide_width = 20
 subdivide_depth = 20
+
+[sub_resource type="Shader" id="Shader_tmb3o"]
+code = "shader_type spatial;
+
+uniform vec3 color:source_color; 
+uniform float density:hint_range(0.0, 1.0, 0.01); 
+uniform float radial_res:hint_range(1, 40, 1); 
+uniform float angular_res:hint_range(1, 40, 1); 
+uniform float line_space:hint_range(0.0, 1.0, 0.01); 
+uniform float revolutions;
+uniform float emission:hint_range(0.0, 20.0, 0.01); 
+
+float circle(vec2 uv, float diameter, float feather)
+{
+    float radius = diameter/2.0;
+    return smoothstep(radius, radius -feather, length(uv - vec2(0.5)));
+}
+vec2 polar_coordinates(vec2 uv, vec2 center)
+{
+    vec2 dir = uv ;
+    float radius = length(dir) * 2.0;
+    float angle = atan(dir.y, dir.x) / TAU; 
+    return (vec2(radius, angle)); 
+}
+float random (vec2 st) {
+    return fract(sin(dot(st.xy,
+                      vec2(12.9898,78.233))) * 43758.5453123);
+}
+float randomf(float x){
+	return fract(sin(x) * 100000.0); 
+}
+void fragment() {   
+
+    vec2 res = vec2(radial_res,angular_res); 	
+    vec2 uv = polar_coordinates(UV,vec2(0.5)); 
+    vec2 igrid = floor(fract(uv)*res);
+    vec2 uv2 = polar_coordinates(UV,vec2(0.5)); 
+    uv2.y -= (revolutions*TIME*0.02) * (randomf(igrid.x)+0.1);
+
+    vec2 igrid2 = floor(fract(uv2)*res)/res;	
+    vec2 fgrid = fract(uv2*res);
+    float vsmask = step(line_space, fgrid.x);  
+    float rnd = random(igrid2); 	
+    float val = float(rnd > (1.0 - density)); 
+    float cmask = 1.0 - circle(UV,1.0,0.0); 	
+    ALBEDO = color; 
+    EMISSION = color * emission; 
+    ALPHA = val*cmask* vsmask;//val*vsmask*cmask;
+}"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_favb5"]
+render_priority = 0
+shader = SubResource("Shader_tmb3o")
+shader_parameter/color = Color(0.941176, 0.47451, 0.631373, 1)
+shader_parameter/density = 0.54
+shader_parameter/radial_res = 12.0
+shader_parameter/angular_res = 12.0
+shader_parameter/line_space = 0.37
+shader_parameter/revolutions = 18.08
+shader_parameter/emission = 1.81
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_ad8sc"]
+material = SubResource("ShaderMaterial_favb5")
+size = Vector2(10, 10)
+subdivide_width = 20
+subdivide_depth = 20
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_vtjx3"]
+size = Vector3(20, 1, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_aeldx"]
+render_priority = 0
+shader = ExtResource("17_3k4l1")
+shader_parameter/R = Vector2(0.8, 0.6)
+shader_parameter/scale = 0.5
+shader_parameter/speed = 1.0
+shader_parameter/direction = Vector3(1, 1, 0)
+shader_parameter/distortion = 0.5
+shader_parameter/layers = 2.0
+shader_parameter/shades = 3.0
+shader_parameter/steps = 6
+shader_parameter/tint = Vector3(0.459, 0.765, 1)
+
+[sub_resource type="QuadMesh" id="QuadMesh_b2cr1"]
+material = SubResource("ShaderMaterial_aeldx")
+size = Vector2(40, 1)
+orientation = 1
 
 [node name="Player" type="Node3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
@@ -46,6 +539,219 @@ script = ExtResource("1_fiw6x")
 
 [node name="PlayerController" type="Node" parent="."]
 script = ExtResource("2_4f7sj")
+
+[node name="PlayerInterface" type="CanvasLayer" parent="."]
+script = ExtResource("2_kmbv1")
+
+[node name="Control" type="Control" parent="PlayerInterface"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="PlayerInterface/Control"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_bottom = 20
+
+[node name="GridContainer" type="GridContainer" parent="PlayerInterface/Control/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 8
+theme_override_constants/h_separation = 6
+columns = 4
+
+[node name="QPanel" type="Panel" parent="PlayerInterface/Control/MarginContainer/GridContainer"]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+
+[node name="TextureRect" type="TextureRect" parent="PlayerInterface/Control/MarginContainer/GridContainer/QPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("AtlasTexture_vve6h")
+expand_mode = 2
+
+[node name="Label4" type="Label" parent="PlayerInterface/Control/MarginContainer/GridContainer/QPanel"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -14.0
+offset_top = -26.5
+offset_right = 14.0
+offset_bottom = 26.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 36
+text = "Q"
+
+[node name="Clock" type="TextureRect" parent="PlayerInterface/Control/MarginContainer/GridContainer/QPanel" node_paths=PackedStringArray("skill")]
+visible = false
+material = SubResource("ShaderMaterial_5wbkd")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("NoiseTexture2D_pwru6")
+script = ExtResource("6_84v7h")
+skill = NodePath("../../../../../../Character/Skills/Qskill")
+
+[node name="WPanel" type="Panel" parent="PlayerInterface/Control/MarginContainer/GridContainer"]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+
+[node name="TextureRect" type="TextureRect" parent="PlayerInterface/Control/MarginContainer/GridContainer/WPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("AtlasTexture_vve6h")
+expand_mode = 2
+
+[node name="Label4" type="Label" parent="PlayerInterface/Control/MarginContainer/GridContainer/WPanel"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -6.5
+offset_top = -13.0
+offset_right = 6.5
+offset_bottom = 13.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 36
+text = "W"
+
+[node name="Clock" type="TextureRect" parent="PlayerInterface/Control/MarginContainer/GridContainer/WPanel" node_paths=PackedStringArray("skill")]
+visible = false
+material = SubResource("ShaderMaterial_risyf")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("NoiseTexture2D_2v4iw")
+script = ExtResource("6_84v7h")
+skill = NodePath("../../../../../../Character/Skills/Wskill")
+
+[node name="EPanel" type="Panel" parent="PlayerInterface/Control/MarginContainer/GridContainer"]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+
+[node name="TextureRect" type="TextureRect" parent="PlayerInterface/Control/MarginContainer/GridContainer/EPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("AtlasTexture_vve6h")
+expand_mode = 2
+
+[node name="Label4" type="Label" parent="PlayerInterface/Control/MarginContainer/GridContainer/EPanel"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -6.5
+offset_top = -13.0
+offset_right = 6.5
+offset_bottom = 13.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 36
+text = "E"
+
+[node name="Clock" type="TextureRect" parent="PlayerInterface/Control/MarginContainer/GridContainer/EPanel" node_paths=PackedStringArray("skill")]
+visible = false
+material = SubResource("ShaderMaterial_laq03")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("NoiseTexture2D_jy3of")
+script = ExtResource("6_84v7h")
+skill = NodePath("../../../../../../Character/Skills/Eskill")
+
+[node name="RPanel" type="Panel" parent="PlayerInterface/Control/MarginContainer/GridContainer"]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+
+[node name="TextureRect" type="TextureRect" parent="PlayerInterface/Control/MarginContainer/GridContainer/RPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("AtlasTexture_vve6h")
+expand_mode = 2
+
+[node name="Label4" type="Label" parent="PlayerInterface/Control/MarginContainer/GridContainer/RPanel"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -6.5
+offset_top = -13.0
+offset_right = 6.5
+offset_bottom = 13.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 36
+text = "R"
+
+[node name="Clock" type="TextureRect" parent="PlayerInterface/Control/MarginContainer/GridContainer/RPanel" node_paths=PackedStringArray("skill")]
+visible = false
+material = SubResource("ShaderMaterial_bpuwa")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("NoiseTexture2D_wl5b0")
+script = ExtResource("6_84v7h")
+skill = NodePath("../../../../../../Character/Skills/Rskill")
 
 [node name="Sprite3D" type="Sprite3D" parent="."]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 1.88525, 0)
@@ -101,26 +807,88 @@ transform = Transform3D(3.1746, 0, 0, 0, 3.1746, 0, 0, 0, 3.1746, 0, 2.38095, 0)
 visible = false
 collision_layer = 4
 collision_mask = 4
+script = ExtResource("8_tqs71")
 
-[node name="QuTimer" type="Timer" parent="Character/Skills/Qskill"]
+[node name="SkillTimer" type="Timer" parent="Character/Skills/Qskill"]
 
 [node name="Front" type="CollisionShape3D" parent="Character/Skills/Qskill"]
 transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, 5, 0, 0)
 shape = SubResource("SphereShape3D_ar4ly")
 
 [node name="Sprite3D" type="MeshInstance3D" parent="Character/Skills/Qskill/Front"]
-mesh = SubResource("PlaneMesh_v28fc")
+mesh = ExtResource("9_fu7a0")
 
 [node name="Right" type="CollisionShape3D" parent="Character/Skills/Qskill"]
 transform = Transform3D(0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, 0.707107, 0, 0, 5)
 shape = SubResource("SphereShape3D_ar4ly")
 
 [node name="Sprite3D" type="MeshInstance3D" parent="Character/Skills/Qskill/Right"]
-mesh = SubResource("PlaneMesh_v28fc")
+mesh = ExtResource("9_fu7a0")
 
 [node name="Left" type="CollisionShape3D" parent="Character/Skills/Qskill"]
 transform = Transform3D(-0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, -0.707107, 0, 1, -5)
 shape = SubResource("SphereShape3D_ar4ly")
 
 [node name="Sprite3D" type="MeshInstance3D" parent="Character/Skills/Qskill/Left"]
-mesh = SubResource("PlaneMesh_v28fc")
+mesh = ExtResource("9_fu7a0")
+
+[node name="Wskill" type="Area3D" parent="Character/Skills"]
+transform = Transform3D(3.1746, 0, 0, 0, 3.1746, 0, 0, 0, 3.1746, 0, 2.38095, 0)
+visible = false
+collision_layer = 4
+collision_mask = 4
+script = ExtResource("14_6actw")
+
+[node name="SkillTimer" type="Timer" parent="Character/Skills/Wskill"]
+
+[node name="Front" type="CollisionShape3D" parent="Character/Skills/Wskill"]
+transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, 5, 0, 0)
+shape = SubResource("SphereShape3D_ar4ly")
+
+[node name="Sprite3D" type="MeshInstance3D" parent="Character/Skills/Wskill/Front"]
+mesh = SubResource("PlaneMesh_1em1a")
+
+[node name="Eskill" type="Area3D" parent="Character/Skills"]
+transform = Transform3D(3.1746, 0, 0, 0, 3.1746, 0, 0, 0, 3.1746, 0, 2.38095, 0)
+visible = false
+collision_layer = 4
+collision_mask = 4
+script = ExtResource("10_krv2w")
+
+[node name="SkillTimer" type="Timer" parent="Character/Skills/Eskill"]
+
+[node name="Front" type="CollisionShape3D" parent="Character/Skills/Eskill"]
+transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, 5, 0, 0)
+shape = SubResource("SphereShape3D_ar4ly")
+
+[node name="Sprite3D" type="MeshInstance3D" parent="Character/Skills/Eskill/Front"]
+mesh = SubResource("PlaneMesh_ad8sc")
+
+[node name="Right" type="CollisionShape3D" parent="Character/Skills/Eskill"]
+transform = Transform3D(0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, 0.707107, 0, 0, 5)
+shape = SubResource("SphereShape3D_ar4ly")
+
+[node name="Sprite3D" type="MeshInstance3D" parent="Character/Skills/Eskill/Right"]
+mesh = ExtResource("10_03v5x")
+
+[node name="Left" type="CollisionShape3D" parent="Character/Skills/Eskill"]
+transform = Transform3D(-0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, -0.707107, 0, 1, -5)
+shape = SubResource("SphereShape3D_ar4ly")
+
+[node name="Sprite3D" type="MeshInstance3D" parent="Character/Skills/Eskill/Left"]
+mesh = ExtResource("10_03v5x")
+
+[node name="Rskill" type="Area3D" parent="Character/Skills"]
+transform = Transform3D(3.1746, 0, 0, 0, 3.1746, 0, 0, 0, 3.1746, 0, 0, 0)
+collision_layer = 4
+collision_mask = 4
+script = ExtResource("17_ltfo0")
+
+[node name="SkillTimer" type="Timer" parent="Character/Skills/Rskill"]
+
+[node name="Front" type="CollisionShape3D" parent="Character/Skills/Rskill"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 21, 1, 0)
+shape = SubResource("BoxShape3D_vtjx3")
+
+[node name="Sprite3D" type="MeshInstance3D" parent="Character/Skills/Rskill/Front"]
+mesh = SubResource("QuadMesh_b2cr1")

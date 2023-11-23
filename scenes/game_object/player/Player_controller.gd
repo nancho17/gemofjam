@@ -4,6 +4,7 @@ extends Node
 @onready var player_main = $".."
 @onready var character = $"../Character"
 @onready var character_skills = $"../Character/Skills"
+@onready var player_interface = $"../PlayerInterface"
 
 var camera_one : Camera3D
 var default_3d_map_rid : RID
@@ -20,12 +21,6 @@ var movement_delta: float
 var target_pos : Vector3
 const delta_pos : float = 0.1
 
-var q_test = 0
-var w_test = 0
-var e_test = 0
-var r_test = 0
-
-
 func _ready():
 	camera_one  = player_main.get_node("PlayerCam")
 	call_deferred("custom_setup")
@@ -41,21 +36,20 @@ func _process(_delta: float):
 
 	if Input.is_action_just_pressed("q_skill"):
 		process_movement = false
-		q_test += 1 
 		character_skills.q_skill()
+		player_interface.ui_q_skill()
 
 	if Input.is_action_just_pressed("w_skill"):
 		process_movement = false
-		w_test += 1 
-		prints("doblebe",w_test)
+		character_skills.w_skill()
+		player_interface.ui_w_skill()
 
 	if Input.is_action_just_pressed("e_skill"):
-		e_test += 1 
-		prints("e",e_test)
+		character_skills.e_skill()
+		player_interface.ui_e_skill()
 
 	if Input.is_action_just_pressed("r_skill"):
-		r_test += 1 
-		prints("erre",r_test)
+		print("erre")
 
 func _physics_process(delta):
 	movement_process(delta)
@@ -77,7 +71,6 @@ func movement_process(delta):
 	if not process_movement:
 		return
 
-
 #	print("dist:" ,p_origin.distance_to(current_path_point))
 	var p_origin = player_main.global_transform.origin
 	movement_delta = movement_speed * delta
@@ -89,7 +82,7 @@ func movement_process(delta):
 		player_main.global_transform.origin = p_origin.move_toward(target_pos, movement_delta)
 		if p_origin==target_pos:
 			process_movement = false
-			print("done origin",p_origin,"target pos",target_pos)
+#			print("done origin",p_origin,"target pos",target_pos)
 	else:
 		if p_origin.distance_to(current_path_point) <= path_point_margin:
 			current_path_index += 1

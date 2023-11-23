@@ -1,12 +1,10 @@
-[gd_scene load_steps=15 format=3 uid="uid://c48njl6ghr63r"]
+[gd_scene load_steps=10 format=3 uid="uid://c48njl6ghr63r"]
 
 [ext_resource type="Script" path="res://scenes/game_object/enemy/guana_enemy/guana_enemy.gd" id="1_20opb"]
 [ext_resource type="Resource" uid="uid://cgixwopa3t0lj" path="res://scenes/game_object/enemy/guana_enemy/guana_stats.tres" id="2_dload"]
 [ext_resource type="Texture2D" uid="uid://drt5kod16lia2" path="res://assets/textures/gui/Red/Red.png" id="3_iqsdh"]
 [ext_resource type="Texture2D" uid="uid://xgnqk8b7ffx5" path="res://assets/textures/gui/Green/Green.png" id="4_gqw3o"]
 [ext_resource type="PackedScene" uid="uid://dgh3bd5cb4ko0" path="res://scenes/game_object/enemy/basics/basic_guana.tscn" id="5_64x8g"]
-[ext_resource type="Script" path="res://scenes/game_object/player/Skills.gd" id="6_3ghjx"]
-[ext_resource type="Shader" path="res://scenes/game_object/player/skill_q.gdshader" id="7_fntlo"]
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_g4xx7"]
 viewport_path = NodePath("Bars/LifeViewport")
@@ -21,26 +19,6 @@ region = Rect2(162, 130, 76, 14)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_8lis3"]
 size = Vector3(5, 4, 3)
-
-[sub_resource type="SphereShape3D" id="SphereShape3D_ar4ly"]
-radius = 5.0
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_3l7ir"]
-render_priority = 0
-shader = ExtResource("7_fntlo")
-shader_parameter/color = Color(0.0745098, 0.47451, 0.631373, 1)
-shader_parameter/density = 0.54
-shader_parameter/radial_res = 12.0
-shader_parameter/angular_res = 12.0
-shader_parameter/line_space = 0.37
-shader_parameter/revolutions = 18.08
-shader_parameter/emission = 1.81
-
-[sub_resource type="PlaneMesh" id="PlaneMesh_v28fc"]
-material = SubResource("ShaderMaterial_3l7ir")
-size = Vector2(10, 10)
-subdivide_width = 20
-subdivide_depth = 20
 
 [node name="GuanaEnemy" type="Node3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
@@ -87,35 +65,3 @@ shape = SubResource("BoxShape3D_8lis3")
 
 [node name="CharacterBody" parent="GuanaChar" instance=ExtResource("5_64x8g")]
 transform = Transform3D(-1.31134e-07, 0, 3, 0, 3, 0, -3, 0, -1.31134e-07, 0, 0, 0)
-
-[node name="Skills" type="Node3D" parent="GuanaChar"]
-script = ExtResource("6_3ghjx")
-
-[node name="Qskill" type="Area3D" parent="GuanaChar/Skills"]
-transform = Transform3D(3.1746, 0, 0, 0, 3.1746, 0, 0, 0, 3.1746, 0, 2.38095, 0)
-visible = false
-collision_layer = 2
-collision_mask = 2
-
-[node name="QuTimer" type="Timer" parent="GuanaChar/Skills/Qskill"]
-
-[node name="Front" type="CollisionShape3D" parent="GuanaChar/Skills/Qskill"]
-transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, 5, 0, 0)
-shape = SubResource("SphereShape3D_ar4ly")
-
-[node name="Sprite3D" type="MeshInstance3D" parent="GuanaChar/Skills/Qskill/Front"]
-mesh = SubResource("PlaneMesh_v28fc")
-
-[node name="Right" type="CollisionShape3D" parent="GuanaChar/Skills/Qskill"]
-transform = Transform3D(0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, 0.707107, 0, 0, 5)
-shape = SubResource("SphereShape3D_ar4ly")
-
-[node name="Sprite3D" type="MeshInstance3D" parent="GuanaChar/Skills/Qskill/Right"]
-mesh = SubResource("PlaneMesh_v28fc")
-
-[node name="Left" type="CollisionShape3D" parent="GuanaChar/Skills/Qskill"]
-transform = Transform3D(-0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, -0.707107, 0, 1, -5)
-shape = SubResource("SphereShape3D_ar4ly")
-
-[node name="Sprite3D" type="MeshInstance3D" parent="GuanaChar/Skills/Qskill/Left"]
-mesh = SubResource("PlaneMesh_v28fc")

@@ -7,7 +7,7 @@ func _ready():
 	original_pos = position
 	set_process_priority(10)
 
-func _process(delta):
+func _process(_delta):
 	if Input.is_action_just_pressed("zoom_in"):
 		camera_zoom-=1
 		do_zoom()
@@ -18,4 +18,4 @@ func _process(delta):
 func do_zoom():
 	camera_zoom = clamp(camera_zoom,0,15)
 	position= original_pos * (1+(camera_zoom*0.10))
-	prints("Cam zoom val:",camera_zoom,position)
+#	prints("Cam zoom val:",camera_zoom,position)

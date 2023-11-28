@@ -12,7 +12,9 @@ func _ready():
 		current_health = stats.max_health
 		life_progress_bar.set_max(stats.max_health)
 		life_progress_bar.set_value(stats.max_health)
-		print(current_health)
+		var eme = "H%s" % current_health
+		label.set_text(eme)
+		label.set_visible(true)
 	else:
 		queue_free()
 
@@ -30,5 +32,4 @@ func decrease_health(health_delta : int):
 	label.set_text(eme)
 	if current_health == 0:
 		prints("this is dead")
-
 

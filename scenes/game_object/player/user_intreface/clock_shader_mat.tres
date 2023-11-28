@@ -1,6 +1,6 @@
 [gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://cdkhah3q5ex2a"]
 
-[ext_resource type="Shader" path="res://scenes/game_object/player/player_skills/clock.gdshader" id="1_qusgf"]
+[ext_resource type="Shader" path="res://scenes/game_object/player/user_intreface/clock.gdshader" id="1_qusgf"]
 
 [resource]
 shader = ExtResource("1_qusgf")

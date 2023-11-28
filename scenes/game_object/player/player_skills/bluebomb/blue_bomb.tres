@@ -1,10 +1,10 @@
 [gd_resource type="PlaneMesh" load_steps=3 format=3 uid="uid://3be4da21oisb"]
 
-[ext_resource type="Shader" path="res://scenes/game_object/player/skill_q.gdshader" id="1_5w0v5"]
+[ext_resource type="Shader" path="res://scenes/game_object/player/player_skills/bluebomb/skill_q.gdshader" id="1_fadw5"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_aaunw"]
 render_priority = 0
-shader = ExtResource("1_5w0v5")
+shader = ExtResource("1_fadw5")
 shader_parameter/color = Color(0.105882, 1, 1, 1)
 shader_parameter/density = 0.54
 shader_parameter/radial_res = 12.0

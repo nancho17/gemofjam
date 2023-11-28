@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://c48njl6ghr63r"]
+[gd_scene load_steps=16 format=3 uid="uid://c48njl6ghr63r"]
 
 [ext_resource type="Script" path="res://scenes/game_object/enemy/guana_enemy/guana_enemy.gd" id="1_20opb"]
 [ext_resource type="Resource" uid="uid://cgixwopa3t0lj" path="res://scenes/game_object/enemy/guana_enemy/guana_stats.tres" id="2_dload"]
@@ -46,20 +46,6 @@ shader_parameter/alpha_distance_max = 1.6
 shader_parameter/alpha_time_scale = 1.0
 shader_parameter/emission_intensity = 2.0
 shader_parameter/highlight_intensity = 3.0
-
-[sub_resource type="CylinderShape3D" id="CylinderShape3D_yw68e"]
-radius = 10.0
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_05kl1"]
-transparency = 1
-albedo_color = Color(0.780392, 0.356863, 0.462745, 0.360784)
-
-[sub_resource type="CylinderMesh" id="CylinderMesh_bnwbw"]
-material = SubResource("StandardMaterial3D_05kl1")
-top_radius = 15.0
-bottom_radius = 15.0
-radial_segments = 32
-rings = 2
 
 [node name="GuanaEnemy" type="Node3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
@@ -112,28 +98,21 @@ transform = Transform3D(-1.31134e-07, 0, 3, 0, 3, 0, -3, 0, -1.31134e-07, 0, 0, 
 
 [node name="Skills" type="Node3D" parent="GuanaChar"]
 
-[node name="Firstskill" type="RigidBody3D" parent="GuanaChar/Skills"]
+[node name="Rskill" type="RigidBody3D" parent="GuanaChar/Skills"]
 collision_layer = 8
 collision_mask = 8
-mass = 0.1
-gravity_scale = 0.8
+mass = 0.2
+gravity_scale = 0.1
 linear_velocity = Vector3(1, 0, 0)
 script = ExtResource("7_fdlts")
 
-[node name="Front" type="CollisionShape3D" parent="GuanaChar/Skills/Firstskill"]
+[node name="Front" type="CollisionShape3D" parent="GuanaChar/Skills/Rskill"]
 transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 3.83779, 0.626768, 0)
 shape = SubResource("CapsuleShape3D_m422x")
 
-[node name="SpearForm" type="MeshInstance3D" parent="GuanaChar/Skills/Firstskill/Front"]
+[node name="SpearForm" type="MeshInstance3D" parent="GuanaChar/Skills/Rskill/Front"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 mesh = SubResource("CapsuleMesh_umtx0")
 surface_material_override/0 = SubResource("ShaderMaterial_xmhui")
 
-[node name="SkillTimer" type="Timer" parent="GuanaChar/Skills/Firstskill"]
-
-[node name="Range" type="Area3D" parent="GuanaChar"]
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="GuanaChar/Range"]
-shape = SubResource("CylinderShape3D_yw68e")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="GuanaChar/Range"]
-mesh = SubResource("CylinderMesh_bnwbw")
+[node name="SkillTimer" type="Timer" parent="GuanaChar/Skills/Rskill"]

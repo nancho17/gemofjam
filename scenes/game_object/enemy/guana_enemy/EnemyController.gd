@@ -1,14 +1,10 @@
 extends Node
 
-# Exports
 @onready var player_main = $".."
-@onready var character = $"../Character"
-@onready var character_skills = $"../Character/Skills"
-@onready var player_interface = $"../PlayerInterface"
+@export var character : CharacterBody3D
 
 var camera_one : Camera3D
 var default_3d_map_rid : RID
-
 var movement_speed: float = 4.0
 
 # Command vars
@@ -21,40 +17,20 @@ var movement_delta: float
 var target_pos : Vector3
 const delta_pos : float = 0.1
 
-func _ready():
-	camera_one  = player_main.get_node("PlayerCam")
-	call_deferred("custom_setup")
+
+@onready var firstskill = $"../GuanaChar/Skills/Firstskill"
+
+func _process(_delta: float):
+	if Input.is_action_just_pressed("test_skill"):
+		var m_pos : Vector2 = get_viewport().get_mouse_position()
+		process_movement = false
+		firstskill.execute()
+		
+
 
 func custom_setup():
 	default_3d_map_rid = player_main.get_world_3d().get_navigation_map()
 
-func _process(_delta: float):
-	
-	if Input.is_action_pressed("pointer_command"):
-		var m_pos : Vector2 = get_viewport().get_mouse_position()
-		move_to_pointer(m_pos)
-
-	if Input.is_action_just_pressed("q_skill"):
-		process_movement = false
-		character_skills.q_skill()
-		player_interface.ui_q_skill()
-
-	if Input.is_action_just_pressed("w_skill"):
-		process_movement = false
-		character_skills.w_skill()
-		player_interface.ui_w_skill()
-
-	if Input.is_action_just_pressed("e_skill"):
-		character_skills.e_skill()
-		player_interface.ui_e_skill()
-
-	if Input.is_action_just_pressed("r_skill"):
-		process_movement = false
-		character_skills.r_skill()
-		player_interface.ui_r_skill()
-
-func _physics_process(delta):
-	movement_process(delta)
 
 func set_movement_target(target_position: Vector3):
 	var start_position: Vector3 = player_main.global_transform.origin
@@ -104,7 +80,7 @@ func move_to_pointer(m_pos: Vector2):
 	if !result.is_empty():
 		move_to(result.position)
 	else:
-		print(" playa ta jodido")
+		print("ta jodido")
 #Pointer select
 func raycast_from_mouse (collision_mask_var , m_pos):
 	var ray_start : Vector3 = camera_one.project_ray_origin(m_pos)

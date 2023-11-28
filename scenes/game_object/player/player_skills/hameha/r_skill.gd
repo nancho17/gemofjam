@@ -1,8 +1,10 @@
 extends Area3D
-@onready var ee_timer = $SkillTimer
+@onready var skill_timer :Timer = $SkillTimer
 
-var cooldown : float = 2.3
+var cooldown : float = 45.0
+var cast_time : float = 1.5
 var skill_stage : int
+var damage_send : int = 100
 
 enum stage_step {
 	MODE_FIRST,
@@ -12,20 +14,21 @@ enum stage_step {
 	};
 
 #func _physics_process(delta):
-#	prints("t: ",qu_timer.get_time_left())
+#	prints("t: ",skill_timer.get_time_left())1
 
-func e_skill_effect(body:Node3D):
-	body.get_parent_node_3d().from_composed_damage(35)
+func q_skill_effect(body:Node3D):
+	prints("A body: ", body.get_parent_node_3d().name)
+	body.get_parent_node_3d().from_composed_damage(damage_send)
 
 func get_cooldown():
-	return (cooldown+0.300)
+	return (cooldown+cast_time)
 
 func _ready():
-	body_entered.connect(e_skill_effect)
+	body_entered.connect(q_skill_effect)
 	skill_stage = stage_step.MODE_FIRST
-	ee_timer.timeout.connect(_on_timer_timeout)
-	ee_timer.set_wait_time(10.0)
-	ee_timer.set_one_shot(true)
+	skill_timer.timeout.connect(_on_timer_timeout)
+	skill_timer.set_wait_time(10.0)
+	skill_timer.set_one_shot(true)
 	set_monitoring(false)
 
 	
@@ -35,18 +38,17 @@ func _on_timer_timeout():
 			skill_stage = stage_step.MODE_THIRD
 			set_visible(false)
 			set_monitoring(false)
-			ee_timer.start(cooldown)
+			skill_timer.start(cooldown)
 			print("end")
 		stage_step.MODE_THIRD:
 			skill_stage = stage_step.MODE_FIRST
 			print("cooled and ready")
 		_:
-			print("TOTAL FAIL")
+			print("SKILL TOTAL FAIL")
 
 func execute():
 	if skill_stage == stage_step.MODE_FIRST:
 		skill_stage = stage_step.MODE_SECOND
-		ee_timer.start(0.300)
-		print(" Execyte ")
+		skill_timer.start(cast_time)
 		set_visible(true)
 		set_monitoring(true)

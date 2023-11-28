@@ -1,22 +1,21 @@
-[gd_scene load_steps=52 format=3 uid="uid://b6f23hws4kxja"]
+[gd_scene load_steps=58 format=3 uid="uid://b6f23hws4kxja"]
 
 [ext_resource type="Script" path="res://scenes/game_object/player/Player.gd" id="1_fiw6x"]
 [ext_resource type="Script" path="res://scenes/game_object/player/Player_controller.gd" id="2_4f7sj"]
-[ext_resource type="Script" path="res://scenes/game_object/player/PlayerInterface.gd" id="2_kmbv1"]
-[ext_resource type="PackedScene" uid="uid://dt5wokxf4spds" path="res://scenes/game_object/player/knight_standing.tscn" id="2_nexdr"]
+[ext_resource type="PackedScene" uid="uid://dt5wokxf4spds" path="res://scenes/game_object/player/model_char/knight_standing.tscn" id="2_nexdr"]
 [ext_resource type="Texture2D" uid="uid://ccbisoyc6x7sj" path="res://assets/textures/gui/White/White.png" id="2_rk8sd"]
 [ext_resource type="Texture2D" uid="uid://drt5kod16lia2" path="res://assets/textures/gui/Red/Red.png" id="3_2dyg5"]
 [ext_resource type="Script" path="res://scenes/game_object/player/PlayerCam.gd" id="3_766ov"]
+[ext_resource type="Script" path="res://scenes/game_object/player/user_intreface/PlayerInterface.gd" id="3_daq08"]
 [ext_resource type="Texture2D" uid="uid://xgnqk8b7ffx5" path="res://assets/textures/gui/Green/Green.png" id="3_mteea"]
-[ext_resource type="Script" path="res://scenes/game_object/player/Skills.gd" id="5_ikcjv"]
-[ext_resource type="Script" path="res://scenes/game_object/player/Clock.gd" id="6_84v7h"]
-[ext_resource type="Script" path="res://scenes/game_object/player/player_skills/q_skill.gd" id="8_tqs71"]
-[ext_resource type="PlaneMesh" uid="uid://3be4da21oisb" path="res://scenes/game_object/player/player_skills/blue_bomb.tres" id="9_fu7a0"]
-[ext_resource type="PlaneMesh" uid="uid://csaic0xqrw6r4" path="res://scenes/game_object/player/player_skills/red_bomb.tres" id="10_03v5x"]
-[ext_resource type="Script" path="res://scenes/game_object/player/player_skills/e_skill.gd" id="10_krv2w"]
-[ext_resource type="Script" path="res://scenes/game_object/player/player_skills/w_skill.gd" id="14_6actw"]
-[ext_resource type="Shader" path="res://scenes/game_object/player/player_skills/fire_hameha.gdshader" id="17_3k4l1"]
-[ext_resource type="Script" path="res://scenes/game_object/player/player_skills/r_skill.gd" id="17_ltfo0"]
+[ext_resource type="Script" path="res://scenes/game_object/player/user_intreface/Clock.gd" id="5_dukyh"]
+[ext_resource type="Script" path="res://scenes/game_object/player/player_skills/Skills.gd" id="10_vo7rk"]
+[ext_resource type="Script" path="res://scenes/game_object/player/player_skills/bluebomb/q_skill.gd" id="11_1y5e4"]
+[ext_resource type="PlaneMesh" uid="uid://3be4da21oisb" path="res://scenes/game_object/player/player_skills/bluebomb/blue_bomb.tres" id="12_vjwvn"]
+[ext_resource type="Script" path="res://scenes/game_object/player/player_skills/dasher/w_skill.gd" id="13_xd73h"]
+[ext_resource type="Script" path="res://scenes/game_object/player/player_skills/multi_shot/e_skill.gd" id="14_u4bir"]
+[ext_resource type="Script" path="res://scenes/game_object/player/player_skills/hameha/r_skill.gd" id="15_25k87"]
+[ext_resource type="Shader" path="res://scenes/game_object/player/player_skills/hameha/fire_hameha.gdshader" id="16_6ehri"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_vve6h"]
 atlas = ExtResource("2_rk8sd")
@@ -429,7 +428,7 @@ void fragment() {
     ALPHA = val*cmask* vsmask;//val*vsmask*cmask;
 }"
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_ew277"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_w0l2a"]
 render_priority = 0
 shader = SubResource("Shader_uejpk")
 shader_parameter/color = Color(0.29, 0.2, 100, 1)
@@ -441,83 +440,52 @@ shader_parameter/revolutions = 18.08
 shader_parameter/emission = 1.81
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_1em1a"]
-material = SubResource("ShaderMaterial_ew277")
+material = SubResource("ShaderMaterial_w0l2a")
 size = Vector2(10, 10)
 subdivide_width = 20
 subdivide_depth = 20
 
-[sub_resource type="Shader" id="Shader_tmb3o"]
-code = "shader_type spatial;
+[sub_resource type="BoxShape3D" id="BoxShape3D_a3wac"]
+size = Vector3(12, 1, 0.1)
 
-uniform vec3 color:source_color; 
-uniform float density:hint_range(0.0, 1.0, 0.01); 
-uniform float radial_res:hint_range(1, 40, 1); 
-uniform float angular_res:hint_range(1, 40, 1); 
-uniform float line_space:hint_range(0.0, 1.0, 0.01); 
-uniform float revolutions;
-uniform float emission:hint_range(0.0, 20.0, 0.01); 
+[sub_resource type="PlaneMesh" id="PlaneMesh_kesmo"]
+material = SubResource("ShaderMaterial_w0l2a")
+size = Vector2(12, 0.2)
 
-float circle(vec2 uv, float diameter, float feather)
-{
-    float radius = diameter/2.0;
-    return smoothstep(radius, radius -feather, length(uv - vec2(0.5)));
-}
-vec2 polar_coordinates(vec2 uv, vec2 center)
-{
-    vec2 dir = uv ;
-    float radius = length(dir) * 2.0;
-    float angle = atan(dir.y, dir.x) / TAU; 
-    return (vec2(radius, angle)); 
-}
-float random (vec2 st) {
-    return fract(sin(dot(st.xy,
-                      vec2(12.9898,78.233))) * 43758.5453123);
-}
-float randomf(float x){
-	return fract(sin(x) * 100000.0); 
-}
-void fragment() {   
+[sub_resource type="BoxShape3D" id="BoxShape3D_d5oum"]
+size = Vector3(10, 1, 0.1)
 
-    vec2 res = vec2(radial_res,angular_res); 	
-    vec2 uv = polar_coordinates(UV,vec2(0.5)); 
-    vec2 igrid = floor(fract(uv)*res);
-    vec2 uv2 = polar_coordinates(UV,vec2(0.5)); 
-    uv2.y -= (revolutions*TIME*0.02) * (randomf(igrid.x)+0.1);
+[sub_resource type="PlaneMesh" id="PlaneMesh_rrb4c"]
+material = SubResource("ShaderMaterial_w0l2a")
+size = Vector2(10, 0.2)
 
-    vec2 igrid2 = floor(fract(uv2)*res)/res;	
-    vec2 fgrid = fract(uv2*res);
-    float vsmask = step(line_space, fgrid.x);  
-    float rnd = random(igrid2); 	
-    float val = float(rnd > (1.0 - density)); 
-    float cmask = 1.0 - circle(UV,1.0,0.0); 	
-    ALBEDO = color; 
-    EMISSION = color * emission; 
-    ALPHA = val*cmask* vsmask;//val*vsmask*cmask;
-}"
+[sub_resource type="BoxShape3D" id="BoxShape3D_e7gvi"]
+size = Vector3(8, 1, 0.1)
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_favb5"]
-render_priority = 0
-shader = SubResource("Shader_tmb3o")
-shader_parameter/color = Color(0.941176, 0.47451, 0.631373, 1)
-shader_parameter/density = 0.54
-shader_parameter/radial_res = 12.0
-shader_parameter/angular_res = 12.0
-shader_parameter/line_space = 0.37
-shader_parameter/revolutions = 18.08
-shader_parameter/emission = 1.81
+[sub_resource type="PlaneMesh" id="PlaneMesh_cqgpi"]
+material = SubResource("ShaderMaterial_w0l2a")
+size = Vector2(8, 0.2)
 
-[sub_resource type="PlaneMesh" id="PlaneMesh_ad8sc"]
-material = SubResource("ShaderMaterial_favb5")
-size = Vector2(10, 10)
-subdivide_width = 20
-subdivide_depth = 20
+[sub_resource type="BoxShape3D" id="BoxShape3D_xuuxd"]
+size = Vector3(6, 1, 0.1)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_2vuy3"]
+material = SubResource("ShaderMaterial_w0l2a")
+size = Vector2(6, 0.2)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_tjnpn"]
+size = Vector3(4, 1, 0.1)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_pjbed"]
+material = SubResource("ShaderMaterial_w0l2a")
+size = Vector2(4, 0.2)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_vtjx3"]
-size = Vector3(20, 1, 1)
+size = Vector3(40, 1, 1.5)
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_aeldx"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_xfljy"]
 render_priority = 0
-shader = ExtResource("17_3k4l1")
+shader = ExtResource("16_6ehri")
 shader_parameter/R = Vector2(0.8, 0.6)
 shader_parameter/scale = 0.5
 shader_parameter/speed = 1.0
@@ -529,7 +497,7 @@ shader_parameter/steps = 6
 shader_parameter/tint = Vector3(0.459, 0.765, 1)
 
 [sub_resource type="QuadMesh" id="QuadMesh_b2cr1"]
-material = SubResource("ShaderMaterial_aeldx")
+material = SubResource("ShaderMaterial_xfljy")
 size = Vector2(40, 1)
 orientation = 1
 
@@ -541,7 +509,7 @@ script = ExtResource("1_fiw6x")
 script = ExtResource("2_4f7sj")
 
 [node name="PlayerInterface" type="CanvasLayer" parent="."]
-script = ExtResource("2_kmbv1")
+script = ExtResource("3_daq08")
 
 [node name="Control" type="Control" parent="PlayerInterface"]
 layout_mode = 3
@@ -612,7 +580,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 texture = SubResource("NoiseTexture2D_pwru6")
-script = ExtResource("6_84v7h")
+script = ExtResource("5_dukyh")
 skill = NodePath("../../../../../../Character/Skills/Qskill")
 
 [node name="WPanel" type="Panel" parent="PlayerInterface/Control/MarginContainer/GridContainer"]
@@ -658,7 +626,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 texture = SubResource("NoiseTexture2D_2v4iw")
-script = ExtResource("6_84v7h")
+script = ExtResource("5_dukyh")
 skill = NodePath("../../../../../../Character/Skills/Wskill")
 
 [node name="EPanel" type="Panel" parent="PlayerInterface/Control/MarginContainer/GridContainer"]
@@ -704,7 +672,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 texture = SubResource("NoiseTexture2D_jy3of")
-script = ExtResource("6_84v7h")
+script = ExtResource("5_dukyh")
 skill = NodePath("../../../../../../Character/Skills/Eskill")
 
 [node name="RPanel" type="Panel" parent="PlayerInterface/Control/MarginContainer/GridContainer"]
@@ -750,7 +718,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 texture = SubResource("NoiseTexture2D_wl5b0")
-script = ExtResource("6_84v7h")
+script = ExtResource("5_dukyh")
 skill = NodePath("../../../../../../Character/Skills/Rskill")
 
 [node name="Sprite3D" type="Sprite3D" parent="."]
@@ -761,6 +729,7 @@ texture = SubResource("ViewportTexture_g4xx7")
 [node name="SubViewport" type="SubViewport" parent="Sprite3D"]
 transparent_bg = true
 size = Vector2i(76, 14)
+render_target_update_mode = 3
 
 [node name="Container" type="Control" parent="Sprite3D/SubViewport"]
 layout_mode = 3
@@ -800,14 +769,14 @@ transform = Transform3D(0.315, 0, 0, 0, 0.315, 0, 0, 0, 0.315, 0, -0.25, 0)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 
 [node name="Skills" type="Node3D" parent="Character"]
-script = ExtResource("5_ikcjv")
+script = ExtResource("10_vo7rk")
 
 [node name="Qskill" type="Area3D" parent="Character/Skills"]
 transform = Transform3D(3.1746, 0, 0, 0, 3.1746, 0, 0, 0, 3.1746, 0, 2.38095, 0)
 visible = false
 collision_layer = 4
 collision_mask = 4
-script = ExtResource("8_tqs71")
+script = ExtResource("11_1y5e4")
 
 [node name="SkillTimer" type="Timer" parent="Character/Skills/Qskill"]
 
@@ -816,28 +785,28 @@ transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, 
 shape = SubResource("SphereShape3D_ar4ly")
 
 [node name="Sprite3D" type="MeshInstance3D" parent="Character/Skills/Qskill/Front"]
-mesh = ExtResource("9_fu7a0")
+mesh = ExtResource("12_vjwvn")
 
 [node name="Right" type="CollisionShape3D" parent="Character/Skills/Qskill"]
 transform = Transform3D(0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, 0.707107, 0, 0, 5)
 shape = SubResource("SphereShape3D_ar4ly")
 
 [node name="Sprite3D" type="MeshInstance3D" parent="Character/Skills/Qskill/Right"]
-mesh = ExtResource("9_fu7a0")
+mesh = ExtResource("12_vjwvn")
 
 [node name="Left" type="CollisionShape3D" parent="Character/Skills/Qskill"]
 transform = Transform3D(-0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, -0.707107, 0, 1, -5)
 shape = SubResource("SphereShape3D_ar4ly")
 
 [node name="Sprite3D" type="MeshInstance3D" parent="Character/Skills/Qskill/Left"]
-mesh = ExtResource("9_fu7a0")
+mesh = ExtResource("12_vjwvn")
 
 [node name="Wskill" type="Area3D" parent="Character/Skills"]
 transform = Transform3D(3.1746, 0, 0, 0, 3.1746, 0, 0, 0, 3.1746, 0, 2.38095, 0)
 visible = false
 collision_layer = 4
 collision_mask = 4
-script = ExtResource("14_6actw")
+script = ExtResource("13_xd73h")
 
 [node name="SkillTimer" type="Timer" parent="Character/Skills/Wskill"]
 
@@ -853,36 +822,51 @@ transform = Transform3D(3.1746, 0, 0, 0, 3.1746, 0, 0, 0, 3.1746, 0, 2.38095, 0)
 visible = false
 collision_layer = 4
 collision_mask = 4
-script = ExtResource("10_krv2w")
+script = ExtResource("14_u4bir")
 
 [node name="SkillTimer" type="Timer" parent="Character/Skills/Eskill"]
 
-[node name="Front" type="CollisionShape3D" parent="Character/Skills/Eskill"]
-transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, 5, 0, 0)
-shape = SubResource("SphereShape3D_ar4ly")
+[node name="Main" type="CollisionShape3D" parent="Character/Skills/Eskill"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 0.7, 0)
+shape = SubResource("BoxShape3D_a3wac")
 
-[node name="Sprite3D" type="MeshInstance3D" parent="Character/Skills/Eskill/Front"]
-mesh = SubResource("PlaneMesh_ad8sc")
+[node name="lenght" type="MeshInstance3D" parent="Character/Skills/Eskill/Main"]
+mesh = SubResource("PlaneMesh_kesmo")
 
-[node name="Right" type="CollisionShape3D" parent="Character/Skills/Eskill"]
-transform = Transform3D(0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, 0.707107, 0, 0, 5)
-shape = SubResource("SphereShape3D_ar4ly")
+[node name="Right1" type="CollisionShape3D" parent="Character/Skills/Eskill"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0.6, 0.3)
+shape = SubResource("BoxShape3D_d5oum")
 
-[node name="Sprite3D" type="MeshInstance3D" parent="Character/Skills/Eskill/Right"]
-mesh = ExtResource("10_03v5x")
+[node name="lenght" type="MeshInstance3D" parent="Character/Skills/Eskill/Right1"]
+mesh = SubResource("PlaneMesh_rrb4c")
 
-[node name="Left" type="CollisionShape3D" parent="Character/Skills/Eskill"]
-transform = Transform3D(-0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, -0.707107, 0, 1, -5)
-shape = SubResource("SphereShape3D_ar4ly")
+[node name="Right2" type="CollisionShape3D" parent="Character/Skills/Eskill"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0.5, 0.6)
+shape = SubResource("BoxShape3D_e7gvi")
 
-[node name="Sprite3D" type="MeshInstance3D" parent="Character/Skills/Eskill/Left"]
-mesh = ExtResource("10_03v5x")
+[node name="lenght" type="MeshInstance3D" parent="Character/Skills/Eskill/Right2"]
+mesh = SubResource("PlaneMesh_cqgpi")
+
+[node name="Right3" type="CollisionShape3D" parent="Character/Skills/Eskill"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0.4, 0.9)
+shape = SubResource("BoxShape3D_xuuxd")
+
+[node name="lenght" type="MeshInstance3D" parent="Character/Skills/Eskill/Right3"]
+mesh = SubResource("PlaneMesh_2vuy3")
+
+[node name="Right4" type="CollisionShape3D" parent="Character/Skills/Eskill"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0.3, 1.2)
+shape = SubResource("BoxShape3D_tjnpn")
+
+[node name="lenght" type="MeshInstance3D" parent="Character/Skills/Eskill/Right4"]
+mesh = SubResource("PlaneMesh_pjbed")
 
 [node name="Rskill" type="Area3D" parent="Character/Skills"]
 transform = Transform3D(3.1746, 0, 0, 0, 3.1746, 0, 0, 0, 3.1746, 0, 0, 0)
+visible = false
 collision_layer = 4
 collision_mask = 4
-script = ExtResource("17_ltfo0")
+script = ExtResource("15_25k87")
 
 [node name="SkillTimer" type="Timer" parent="Character/Skills/Rskill"]
 

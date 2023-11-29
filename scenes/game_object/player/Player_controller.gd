@@ -127,5 +127,5 @@ func move_to(recived_target_pos):
 #	prints("closest_pos", NavigationServer3D.map_get_closest_point(a_map, recived_target_pos) )
 	
 	var closest_pos = NavigationServer3D.map_get_closest_point(a_map, recived_target_pos)
-	target_pos = closest_pos
+	target_pos = Vector3(closest_pos.x,0,closest_pos.z)
 	set_movement_target(closest_pos)

@@ -1,6 +1,6 @@
 extends Node
 
-@onready var player_main = $".."
+@onready var character_main = $".."
 @export var character : CharacterBody3D
 
 var camera_one : Camera3D
@@ -17,23 +17,28 @@ var movement_delta: float
 var target_pos : Vector3
 const delta_pos : float = 0.1
 
+var objective :Node3D
 
 @onready var firstskill = $"../GuanaChar/Skills/Firstskill"
 
+func set_objective(pos: Node3D):
+	objective = pos
+
 func _process(_delta: float):
-	if Input.is_action_just_pressed("test_skill"):
-		var m_pos : Vector2 = get_viewport().get_mouse_position()
-		process_movement = false
-		firstskill.execute()
+	if objective == null:
+		return
 		
+	if Input.is_action_just_pressed("test_skill"):
+		var obj_position = objective.get_global_position()
+		firstskill.execute(obj_position)
 
 
 func custom_setup():
-	default_3d_map_rid = player_main.get_world_3d().get_navigation_map()
+	default_3d_map_rid = character_main.get_world_3d().get_navigation_map()
 
 
 func set_movement_target(target_position: Vector3):
-	var start_position: Vector3 = player_main.global_transform.origin
+	var start_position: Vector3 = character_main.global_transform.origin
 	current_path = NavigationServer3D.map_get_path(
 		default_3d_map_rid,
 		start_position,
@@ -50,14 +55,14 @@ func movement_process(delta):
 		return
 
 #	print("dist:" ,p_origin.distance_to(current_path_point))
-	var p_origin = player_main.global_transform.origin
+	var p_origin = character_main.global_transform.origin
 	movement_delta = movement_speed * delta
 
 	if p_origin.distance_to(target_pos) < 2 or current_path.is_empty():
 #		print("dist:" ,p_origin.distance_to(current_path_point))
 		var n_direction: Vector3 = (target_pos - p_origin).normalized()
 		character.rotation.y = lerp_angle(character.rotation.y,-atan2(n_direction.z, n_direction.x),0.1)
-		player_main.global_transform.origin = p_origin.move_toward(target_pos, movement_delta)
+		character_main.global_transform.origin = p_origin.move_toward(target_pos, movement_delta)
 		if p_origin==target_pos:
 			process_movement = false
 #			print("done origin",p_origin,"target pos",target_pos)
@@ -73,7 +78,7 @@ func movement_process(delta):
 		var n_new_velocity: Vector3 = (current_path_point - p_origin).normalized()
 		character.rotation.y = lerp_angle(character.rotation.y,-atan2(n_new_velocity.z, n_new_velocity.x),0.1)
 		var new_velocity: Vector3 = n_new_velocity * movement_delta
-		player_main.global_transform.origin = p_origin.move_toward(current_path_point+new_velocity, movement_delta)
+		character_main.global_transform.origin = p_origin.move_toward(current_path_point+new_velocity, movement_delta)
 
 func move_to_pointer(m_pos: Vector2):
 	var result :Dictionary = raycast_from_mouse(0b100111,m_pos)
@@ -85,7 +90,7 @@ func move_to_pointer(m_pos: Vector2):
 func raycast_from_mouse (collision_mask_var , m_pos):
 	var ray_start : Vector3 = camera_one.project_ray_origin(m_pos)
 	var rey_end : Vector3 = ray_start + camera_one.project_ray_normal(m_pos) * 1000
-	var space_state = player_main.get_world_3d().direct_space_state
+	var space_state = character_main.get_world_3d().direct_space_state
 	var prqp := PhysicsRayQueryParameters3D.new()
 	prqp.from = ray_start
 	prqp.to = rey_end

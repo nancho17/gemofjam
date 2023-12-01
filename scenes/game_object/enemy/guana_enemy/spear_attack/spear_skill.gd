@@ -55,7 +55,7 @@ func rotate_char(obj_position : Vector3):
 		set_transform(transform_init)
 		var angle_rot = -atan2(dir_to.z, dir_to.x)
 		var angle_to = lerp_angle(character.rotation.y,angle_rot,0.78)
-		character.rotation.y = angle_rot# angle_to
+		character.rotation.y = angle_to
 		transform_init = get_transform()
 		proyectiles_init_pos = get_position()
 
@@ -79,6 +79,8 @@ func execute(obj_pos : Vector3):
 		skill_stage = stage_step.MODE_SECOND
 		skill_timer.start(cast_time)
 		set_visible(true)
+		return true
+	return false
 
 
 

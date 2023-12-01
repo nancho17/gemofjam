@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://c48njl6ghr63r"]
+[gd_scene load_steps=20 format=3 uid="uid://c48njl6ghr63r"]
 
 [ext_resource type="Script" path="res://scenes/game_object/enemy/guana_enemy/guana_enemy.gd" id="1_20opb"]
 [ext_resource type="Resource" uid="uid://cgixwopa3t0lj" path="res://scenes/game_object/enemy/guana_enemy/guana_stats.tres" id="2_dload"]
@@ -8,6 +8,8 @@
 [ext_resource type="PackedScene" uid="uid://dgh3bd5cb4ko0" path="res://scenes/game_object/enemy/basics/basic_guana.tscn" id="5_64x8g"]
 [ext_resource type="Script" path="res://scenes/game_object/enemy/guana_enemy/spear_attack/spear_skill.gd" id="7_0dv6m"]
 [ext_resource type="Shader" path="res://scenes/game_object/enemy/guana_enemy/spear_attack/spear_atack.gdshader" id="7_33u8h"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_e8v8b"]
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_juvvp"]
 viewport_path = NodePath("Bars/LifeViewport")
@@ -62,9 +64,12 @@ radial_segments = 32
 rings = 2
 
 [node name="GuanaEnemy" type="Node3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 script = ExtResource("1_20opb")
 stats = ExtResource("2_dload")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+visible = false
+mesh = SubResource("PlaneMesh_e8v8b")
 
 [node name="CharController" type="Node" parent="." node_paths=PackedStringArray("character")]
 script = ExtResource("3_fj50i")
@@ -100,7 +105,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.630716, 0)
 billboard = 1
 
 [node name="GuanaChar" type="CharacterBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.25, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.02, 0)
 collision_layer = 4
 collision_mask = 0
 
@@ -140,3 +145,6 @@ shape = SubResource("CylinderShape3D_yw68e")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="GuanaChar/Range"]
 mesh = SubResource("CylinderMesh_bnwbw")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.53075, 0.9291, 1.72733)

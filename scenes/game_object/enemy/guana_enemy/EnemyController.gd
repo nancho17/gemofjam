@@ -21,6 +21,12 @@ var objective :Node3D
 
 @onready var firstskill = $"../GuanaChar/Skills/Firstskill"
 
+func execute_skill()-> bool :
+	if objective == null:
+		return false
+	var obj_position = objective.get_global_position()
+	return firstskill.execute(obj_position)
+	
 func set_objective(pos: Node3D):
 	objective = pos
 

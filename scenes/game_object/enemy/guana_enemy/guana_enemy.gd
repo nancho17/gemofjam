@@ -7,11 +7,13 @@ extends Node3D
 
 var current_health : int
 
+func get_controller():
+		return char_controller
+
 func set_target(traget_n :Node3D ):
 		char_controller.set_objective(traget_n)
 
 func _ready():
-
 	if stats:
 		current_health = stats.max_health
 		life_progress_bar.set_max(stats.max_health)
@@ -32,6 +34,7 @@ func decrease_health(health_delta : int):
 	label.set_text(eme)
 	if current_health == 0:
 		prints("this is dead")
+		queue_free()
 		
 
 

@@ -1,8 +1,11 @@
 extends Node3D
+
 @export var stats: Resource
 
 @onready var life_progress_bar = $LifeBar/SubViewport/Container/TextureProgressBar
 @onready var qskill = $Character/Skills/Qskill
+
+signal died
 
 var current_health : int
 
@@ -17,8 +20,6 @@ func _ready():
 
 	else:
 		print("there is a problem")
-		
-
 
 func from_composed_damage(received_damage : int):
 	decrease_health(received_damage)
@@ -31,4 +32,6 @@ func decrease_health(health_delta : int):
 
 	if current_health == 0:
 		prints("this is dead")
+		died.emit()
+		queue_free()
 

@@ -19,6 +19,6 @@ func _init(
 
 [resource]
 script = SubResource("GDScript_nc4n6")
-max_health = 100
-speed = 35
+max_health = 200
+speed = 45
 string = ""

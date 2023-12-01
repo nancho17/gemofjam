@@ -763,7 +763,7 @@ grow_vertical = 2
 text = "123456788"
 
 [node name="PlayerCam" type="Camera3D" parent="."]
-transform = Transform3D(0.71934, -0.569031, 0.39844, 0, 0.573576, 0.819152, -0.694658, -0.589249, 0.412596, 2.3, 5, 2.3)
+transform = Transform3D(0.71934, -0.569031, 0.398439, 0, 0.573576, 0.819152, -0.694658, -0.589249, 0.412596, 2.3, 4.59, 2.3)
 size = 20.0
 script = ExtResource("3_766ov")
 

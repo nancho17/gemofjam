@@ -9,7 +9,7 @@ extends Node
 var camera_one : Camera3D
 var default_3d_map_rid : RID
 
-var movement_speed: float = 4.0
+var movement_speed: float = 8.0
 
 # Command vars
 var current_path_index: int = 0

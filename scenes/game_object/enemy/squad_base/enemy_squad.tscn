@@ -1,0 +1,20 @@
+[gd_scene load_steps=4 format=3 uid="uid://blkbeq62ni6ke"]
+
+[ext_resource type="Script" path="res://scenes/levels/firts_lvl/EnemySquad.gd" id="1_pxnay"]
+[ext_resource type="PackedScene" uid="uid://f7hc1g1r1ffr" path="res://scenes/game_object/enemy/squad_base/squad_base.tscn" id="2_o32qv"]
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_s63t4"]
+radius = 14.923
+
+[node name="EnemySquad" type="Area3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -36.234)
+collision_layer = 0
+collision_mask = 2
+script = ExtResource("1_pxnay")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("CylinderShape3D_s63t4")
+
+[node name="SquadBase" parent="." instance=ExtResource("2_o32qv")]
+
+[node name="Timer" type="Timer" parent="."]

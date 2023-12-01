@@ -1,0 +1,19 @@
+[gd_scene load_steps=2 format=3 uid="uid://f7hc1g1r1ffr"]
+
+[ext_resource type="PackedScene" uid="uid://c48njl6ghr63r" path="res://scenes/game_object/enemy/guana_enemy/guana_enemy.tscn" id="1_f7b8y"]
+
+[node name="SquadBase" type="Node3D"]
+
+[node name="GuanaEnemy" parent="." instance=ExtResource("1_f7b8y")]
+
+[node name="GuanaEnemy2" parent="." instance=ExtResource("1_f7b8y")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 6.832)
+
+[node name="GuanaEnemy3" parent="." instance=ExtResource("1_f7b8y")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.58, 0, 3.461)
+
+[node name="GuanaEnemy4" parent="." instance=ExtResource("1_f7b8y")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.181, 0, 12.151)
+
+[node name="GuanaEnemy5" parent="." instance=ExtResource("1_f7b8y")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.42, 0, -8.043)

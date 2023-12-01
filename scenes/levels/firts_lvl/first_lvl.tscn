@@ -1,4 +1,4 @@
-[gd_scene load_steps=36 format=3 uid="uid://cqfpaf3ukwfdm"]
+[gd_scene load_steps=35 format=3 uid="uid://cqfpaf3ukwfdm"]
 
 [ext_resource type="Script" path="res://scenes/levels/firts_lvl/first_lvl.gd" id="1_0m2xe"]
 [ext_resource type="Script" path="res://scenes/levels/firts_lvl/DemoWaypoint.gd" id="1_f6ukc"]
@@ -11,8 +11,8 @@
 [ext_resource type="PackedScene" uid="uid://c6y3kch24eg0k" path="res://scenes/game_object/ambient/wata/water.tscn" id="4_11xa1"]
 [ext_resource type="Shader" path="res://scenes/levels/firts_lvl/first_lvl.gdshader" id="6_qr3sa"]
 [ext_resource type="PackedScene" uid="uid://b6f23hws4kxja" path="res://scenes/game_object/player/player.tscn" id="7_ic4v0"]
-[ext_resource type="Script" path="res://scenes/levels/firts_lvl/EnemySquad.gd" id="8_nn5wi"]
-[ext_resource type="PackedScene" uid="uid://c48njl6ghr63r" path="res://scenes/game_object/enemy/guana_enemy/guana_enemy.tscn" id="10_730gr"]
+[ext_resource type="PackedScene" uid="uid://blkbeq62ni6ke" path="res://scenes/game_object/enemy/squad_base/enemy_squad.tscn" id="9_djgbg"]
+[ext_resource type="Script" path="res://scenes/levels/firts_lvl/Goal.gd" id="11_blqs2"]
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_274qo"]
 noise_type = 0
@@ -133,9 +133,6 @@ uv1_scale = Vector3(500, 5, 0)
 material = SubResource("StandardMaterial3D_jr44a")
 size = Vector3(40, 6, 1000)
 
-[sub_resource type="CylinderShape3D" id="CylinderShape3D_s63t4"]
-radius = 14.923
-
 [sub_resource type="CylinderMesh" id="CylinderMesh_gcd84"]
 height = 1.0
 
@@ -205,45 +202,47 @@ transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 3.353,
 mesh = SubResource("PrismMesh_f8q2r")
 skeleton = NodePath("../../../Enviroment/Water")
 
-[node name="EnemySquad" type="Area3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -36.234)
-collision_layer = 0
-collision_mask = 2
-script = ExtResource("8_nn5wi")
+[node name="EnemySquad" parent="." instance=ExtResource("9_djgbg")]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="EnemySquad"]
-shape = SubResource("CylinderShape3D_s63t4")
+[node name="EnemySquad5" parent="." instance=ExtResource("9_djgbg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.46774, 0, -105.767)
 
-[node name="SquadBase" type="Node3D" parent="EnemySquad"]
+[node name="EnemySquad2" parent="." instance=ExtResource("9_djgbg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25.9448, 0, -91.9398)
 
-[node name="GuanaEnemy" parent="EnemySquad/SquadBase" instance=ExtResource("10_730gr")]
+[node name="EnemySquad8" parent="." instance=ExtResource("9_djgbg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -47.6654, 0, -157.396)
 
-[node name="GuanaEnemy2" parent="EnemySquad/SquadBase" instance=ExtResource("10_730gr")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 6.832)
+[node name="EnemySquad9" parent="." instance=ExtResource("9_djgbg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -94.1691, 0, -138.999)
 
-[node name="GuanaEnemy3" parent="EnemySquad/SquadBase" instance=ExtResource("10_730gr")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.58, 0, 3.461)
+[node name="EnemySquad6" parent="." instance=ExtResource("9_djgbg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -60.2423, 0, -91.9398)
 
-[node name="GuanaEnemy4" parent="EnemySquad/SquadBase" instance=ExtResource("10_730gr")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.181, 0, 12.151)
+[node name="EnemySquad7" parent="." instance=ExtResource("9_djgbg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -17.6159, 0, -126.705)
 
-[node name="GuanaEnemy5" parent="EnemySquad/SquadBase" instance=ExtResource("10_730gr")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.42, 0, -8.043)
+[node name="EnemySquad3" parent="." instance=ExtResource("9_djgbg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.395, 0, -68.0534)
 
-[node name="Timer" type="Timer" parent="EnemySquad"]
+[node name="EnemySquad4" parent="." instance=ExtResource("9_djgbg")]
+transform = Transform3D(0.096975, 0, -0.995287, 0, 1, 0, 0.995287, 0, 0.096975, -21.3739, 0, -62.2242)
+
+[node name="EnemySquad10" parent="." instance=ExtResource("9_djgbg")]
+transform = Transform3D(0.096975, 0, -0.995287, 0, 1, 0, 0.995287, 0, 0.096975, -47.4782, 0, -124.606)
 
 [node name="Player" parent="." instance=ExtResource("7_ic4v0")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.1773, 0, -20)
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -15.3309)
+[node name="Goal" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -52.6294, 0, -119.577)
 mesh = SubResource("CylinderMesh_gcd84")
+script = ExtResource("11_blqs2")
 
-[node name="Objective" type="Marker3D" parent="MeshInstance3D"]
+[node name="Objective" type="Marker3D" parent="Goal"]
 process_mode = 3
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 
-[node name="DemoWaypoint" type="Control" parent="MeshInstance3D/Objective"]
+[node name="DemoWaypoint" type="Control" parent="Goal/Objective"]
 layout_mode = 3
 anchors_preset = 8
 anchor_left = 0.5
@@ -257,7 +256,7 @@ size_flags_vertical = 4
 script = ExtResource("1_f6ukc")
 text = "Target"
 
-[node name="Label" type="Label" parent="MeshInstance3D/Objective/DemoWaypoint"]
+[node name="Label" type="Label" parent="Goal/Objective/DemoWaypoint"]
 layout_mode = 0
 offset_left = -73.0
 offset_top = -46.0
@@ -267,7 +266,7 @@ text = "Reeeeeeee"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="TextureRect" type="TextureRect" parent="MeshInstance3D/Objective/DemoWaypoint"]
+[node name="TextureRect" type="TextureRect" parent="Goal/Objective/DemoWaypoint"]
 layout_mode = 0
 offset_left = -10.0
 offset_top = -20.0

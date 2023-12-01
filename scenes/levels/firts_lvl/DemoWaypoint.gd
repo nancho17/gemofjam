@@ -1,5 +1,5 @@
 extends Control
-@onready var mesh_instance_3d = $"../MeshInstance3D"
+
 
 # Some margin to keep the marker away from the screen's corners.
 const MARGIN = 8
@@ -49,7 +49,7 @@ func _process(_delta):
 	# Fade the waypoint when the camera gets close.
 	var distance = camera_position.distance_to(parent_position)
 	modulate.a = clamp(remap(distance, 0, 2, 0, 1), 0, 1 )
-
+	
 
 	var ob_pos_cam = parent_position * camera_transform
 	var btest = camera_position * camera_transform
@@ -74,6 +74,7 @@ func _process(_delta):
 	)
 	label.visible = true
 	rotation = 0
+
 
 	# Used to display a diagonal arrow when the waypoint is displayed in
 	# one of the screen corners.

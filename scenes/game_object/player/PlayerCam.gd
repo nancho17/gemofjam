@@ -4,7 +4,9 @@ var camera_zoom : int = 0
 var original_pos
 
 func _ready():
+	camera_zoom = 5
 	original_pos = position
+	position= original_pos * (1+(camera_zoom*0.10))
 	set_process_priority(10)
 
 func _process(_delta):
